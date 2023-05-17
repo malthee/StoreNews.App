@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:i18n_extension/default.i18n.dart';
 import 'package:storenews/domain/news_item.dart';
+import 'package:storenews/ui/widgets/news_item_expires_icon.dart';
+import 'package:storenews/util/dynamic_datetime_format.dart';
+
+import '../pages/news_detail.dart';
 
 class NewsItemStepper extends StatelessWidget {
   final List<NewsItem> newsItems;
@@ -12,56 +16,55 @@ class NewsItemStepper extends StatelessWidget {
     return ListView.builder(
       itemCount: newsItems.length,
       itemBuilder: (context, index) {
+        final newsItem = newsItems[index];
+
         return Card(
+          key: ValueKey('$newsItem.id_listItem'),
           child: ListTile(
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 4.0, vertical: 0.0),
-            horizontalTitleGap: 0.0,
-            visualDensity: VisualDensity.adaptivePlatformDensity,
+            contentPadding: const EdgeInsets.only(right: 8.0),
+            horizontalTitleGap: 4.0,
             titleAlignment: ListTileTitleAlignment.center,
-            onTap: () => _stepTapped(index),
-            leading: IconButton(
-              icon: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50.0),
-                      color: Theme.of(context).colorScheme.surface),
-                  child: Icon(Icons.business_center)),
-              onPressed: () {},
-            ),
+            onTap: () => _itemTapped(context, index),
+            leading: _leadingIcon(context),
             title: Text(newsItems[index].name,
                 maxLines: 1, overflow: TextOverflow.ellipsis),
             subtitle: Text(newsItems[index].markdownContent,
                 maxLines: 2, overflow: TextOverflow.ellipsis),
-            trailing: _newsItemExpiredIcon(index),
+            trailing: _seenExpiresInfo(index),
           ),
         );
       },
     );
   }
 
-  void _stepTapped(int index) {}
+  IconButton _leadingIcon(BuildContext context) {
+    // TODO add link to store
+    return IconButton(
+      icon: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(50.0),
+              color: Theme.of(context).colorScheme.surface),
+          child: const Icon(Icons.business_center)),
+      onPressed: () {},
+    );
+  }
 
-  Widget _newsItemExpiredIcon(int index) {
-    final currentTime = DateTime.now();
-    final expires = newsItems[index].expires;
-    
-    if(expires == null) {
-      return Tooltip(
-        message: 'Never expires'.i18n,
-        child: const Icon(Icons.check_circle, color: Colors.green),
-      );
-    } else if(currentTime.isAfter(expires)) {
-      return Tooltip(
-        message: 'Expired on %s'.i18n.fill([expires]),
-        child: const Icon(Icons.warning_amber, color: Colors.yellow),
-      );
-    } else {
-      return Tooltip(
-        message: 'Expires on %s'.i18n.fill([expires]),
-        child: const Icon(Icons.check_circle, color: Colors.green),
-      );
-    }
-    
-    
+  Column _seenExpiresInfo(int index) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Text('seen %s'
+            .i18n
+            // TODO change to seen from bluetooth
+            .fill([formatDateTimeDynamically(newsItems[index].lastChanged)])),
+        NewsItemExpiredIcon(newsItem: newsItems[index]),
+      ],
+    );
+  }
+
+  void _itemTapped(BuildContext context, int index) {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => NewsDetail(newsItem: newsItems[index])));
   }
 }

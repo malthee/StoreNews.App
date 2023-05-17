@@ -16,24 +16,24 @@ class NewsOverview extends StatelessWidget {
         lastChanged: DateTime.now(),
         companyNumber: 1,
         storeNumber: 1,
-        id: '1'
-    ),
+        id: '1'),
     NewsItem(
         name: 'News Item 2aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-        markdownContent: 'News Item 2 Description #HELLO and so onaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+        markdownContent:
+            'News Item 2 Description #HELLO and so onaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa and more more more',
         lastChanged: DateTime.now(),
         companyNumber: 1,
         storeNumber: 1,
-        id: '2'
-    ),
+        id: '2',
+        expires: DateTime.now().subtract(const Duration(days: 1))),
     NewsItem(
         name: 'News Item 3',
         markdownContent: 'News Item 3 Description #HELLO and so on',
         lastChanged: DateTime.now(),
         companyNumber: 1,
         storeNumber: 1,
-        id: '3'
-    ),
+        id: '3',
+        expires: DateTime.now().add(const Duration(days: 1))),
   ];
 
   @override
@@ -42,16 +42,42 @@ class NewsOverview extends StatelessWidget {
       appBar: AppBar(
         leading: const Icon(Icons.business_center),
         title: Text('Store News'.i18n),
-        actions: const [
-          BtSettingsButton()
-        ],
+        actions: const [BtSettingsButton()],
       ),
       body: Visibility(
           visible: newsItems.isEmpty,
           replacement: NewsItemStepper(newsItems: newsItems),
-          child: Center(
-            child: Text('No news found'.i18n),
-          )
+          child: _noNewsFound(context)),
+    );
+  }
+
+  Widget _noNewsFound(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Container(
+      alignment: Alignment.center,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.article_outlined,
+            size: 80,
+            color: theme.disabledColor,
+          ),
+          const SizedBox(height: 16.0),
+          Text(
+            "No news items available".i18n,
+            style: theme.textTheme.headlineSmall,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 8.0),
+          Text(
+            "Visit some locations and make sure scanning is enabled.".i18n,
+            style: theme.textTheme.bodyMedium!
+                .merge(TextStyle(color: theme.disabledColor)),
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
     );
   }
