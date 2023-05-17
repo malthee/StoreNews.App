@@ -6,10 +6,10 @@ import 'package:storenews/util/dynamic_datetime_format.dart';
 
 import '../pages/news_detail.dart';
 
-class NewsItemStepper extends StatelessWidget {
+class NewsItemList extends StatelessWidget {
   final List<NewsItem> newsItems;
 
-  const NewsItemStepper({super.key, required this.newsItems});
+  const NewsItemList({super.key, required this.newsItems});
 
   @override
   Widget build(BuildContext context) {
@@ -21,16 +21,17 @@ class NewsItemStepper extends StatelessWidget {
         return Card(
           key: ValueKey('$newsItem.id_listItem'),
           child: ListTile(
-            contentPadding: const EdgeInsets.only(right: 8.0),
+            contentPadding:
+                const EdgeInsets.only(right: 8.0, top: 10.0, bottom: 10.0),
             horizontalTitleGap: 4.0,
             titleAlignment: ListTileTitleAlignment.center,
-            onTap: () => _itemTapped(context, index),
+            onTap: () => _itemTapped(context, newsItem),
             leading: _leadingIcon(context),
-            title: Text(newsItems[index].name,
+            title: Text(newsItem.name,
                 maxLines: 1, overflow: TextOverflow.ellipsis),
-            subtitle: Text(newsItems[index].markdownContent,
+            subtitle: Text(newsItem.markdownContent,
                 maxLines: 2, overflow: TextOverflow.ellipsis),
-            trailing: _seenExpiresInfo(index),
+            trailing: _seenExpiresInfo(newsItem),
           ),
         );
       },
@@ -38,33 +39,35 @@ class NewsItemStepper extends StatelessWidget {
   }
 
   IconButton _leadingIcon(BuildContext context) {
-    // TODO add link to store
     return IconButton(
       icon: Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(50.0),
               color: Theme.of(context).colorScheme.surface),
-          child: const Icon(Icons.business_center)),
-      onPressed: () {},
+          child: const Icon(Icons.more_horiz_rounded)),
+      onPressed: () {}, // TODO add link to store
     );
   }
 
-  Column _seenExpiresInfo(int index) {
+  Column _seenExpiresInfo(NewsItem newsItem) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Text('seen %s'
-            .i18n
-            // TODO change to seen from bluetooth
-            .fill([formatDateTimeDynamically(newsItems[index].lastChanged)])),
-        NewsItemExpiredIcon(newsItem: newsItems[index]),
+        if (newsItem.scannedAt != null)
+          Text('scanned %s'
+              .i18n
+              .fill([formatDateTimeDynamically(newsItem.scannedAt!)]))
+        else
+          const Text(''), // Same height as scannedAt text
+        NewsItemExpiredIcon(newsItem: newsItem),
       ],
     );
   }
 
-  void _itemTapped(BuildContext context, int index) {
+  void _itemTapped(BuildContext context, NewsItem newsItem) {
     Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => NewsDetail(newsItem: newsItems[index])));
+        builder: (context) => NewsDetail(
+            key: ValueKey('$newsItem.id_detail'), newsItem: newsItem)));
   }
 }

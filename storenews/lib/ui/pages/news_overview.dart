@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:i18n_extension/default.i18n.dart';
 import 'package:storenews/domain/news_item.dart';
 import 'package:storenews/ui/widgets/bt_settings_button.dart';
-import 'package:storenews/ui/widgets/news_item_stepper.dart';
+import 'package:storenews/ui/widgets/news_item_list.dart';
 
 class NewsOverview extends StatelessWidget {
   NewsOverview({super.key});
@@ -16,7 +16,7 @@ class NewsOverview extends StatelessWidget {
         lastChanged: DateTime.now(),
         companyNumber: 1,
         storeNumber: 1,
-        id: '1'),
+        id: '1')..scannedAt = DateTime.now(),
     NewsItem(
         name: 'News Item 2aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
         markdownContent:
@@ -46,7 +46,7 @@ class NewsOverview extends StatelessWidget {
       ),
       body: Visibility(
           visible: newsItems.isEmpty,
-          replacement: NewsItemStepper(newsItems: newsItems),
+          replacement: NewsItemList(newsItems: newsItems),
           child: _noNewsFound(context)),
     );
   }

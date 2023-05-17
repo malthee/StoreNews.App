@@ -7,6 +7,8 @@ class NewsItem {
   final DateTime lastChanged;
   final DateTime? expires;
   final String? detailImageId;
+  DateTime? scannedAt;
+  bool read = false;
 
   NewsItem({
     required this.id,
