@@ -32,7 +32,7 @@ class StoreNewsApp extends StatelessWidget {
         Locale('en', 'US')
       ],
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        useMaterial3: true,
       ),
       home: NewsOverview(),
     );
