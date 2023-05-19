@@ -44,10 +44,12 @@ class NewsOverview extends StatelessWidget {
         appBar: AppBar(
           leading: const Icon(Icons.business_center),
           title: Text('Store News'.i18n),
-          actions: const [BtSettingsButton()],
+          // TODO scan toggle
+          actions: [BtSettingsButton(isScanning: true, onScanToggle: (){})],
         ),
         body: Column(
           children: [
+            // TODO also show latest images
             _ScanNotRunning(isScanning: true), // TODO connect state
             Visibility(
               visible: newsItems.isEmpty,
