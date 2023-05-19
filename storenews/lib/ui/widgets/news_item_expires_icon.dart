@@ -16,7 +16,7 @@ class NewsItemExpiredIcon extends StatelessWidget {
     if (expires == null) {
       return _expiresToolTip('Never expires'.i18n,
           const Icon(Icons.check_circle, color: Colors.green));
-    } else if (currentTime.isAfter(expires)) {
+    } else if (newsItem.isExpired(currentTime)) {
       return _expiresToolTip(
           'Expired on %s'.i18n.fill([formatDateTimeDynamically(expires)]),
           const Icon(Icons.cancel, color: Colors.red));

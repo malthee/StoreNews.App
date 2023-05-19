@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:i18n_extension/default.i18n.dart';
 import 'package:storenews/domain/news_item.dart';
+import 'package:storenews/ui/pages/store_detail.dart';
 import 'package:storenews/ui/widgets/news_item_expires_icon.dart';
 import 'package:storenews/util/dynamic_datetime_format.dart';
 
@@ -25,10 +26,8 @@ class NewsDetail extends StatelessWidget {
             _ItemExpired(newsItem: newsItem),
             _DetailTitle(newsItem: newsItem),
             Image(
-              // TODO load online
-                image: Image
-                    .network("https://i.imgur.com/p39jy0N.jpg")
-                    .image,
+                // TODO load online
+                image: Image.network("https://i.imgur.com/p39jy0N.jpg").image,
                 fit: BoxFit.contain),
             Center(
                 child: Text('last changed %s'
@@ -60,7 +59,8 @@ class _AppBarStoreTitle extends StatelessWidget {
       child: Material(
         borderRadius: BorderRadius.circular(BorderSizes.circularRadius),
         child: InkWell(
-          onTap: () => {}, // TODO navigate to store
+          onTap: () => _storeTapped(
+              context, newsItem.companyNumber, newsItem.storeNumber),
           borderRadius: BorderRadius.circular(BorderSizes.circularRadius),
           child: Padding(
             padding: const EdgeInsets.all(InsetSizes.small),
@@ -70,9 +70,9 @@ class _AppBarStoreTitle extends StatelessWidget {
                 const Icon(Icons.business_center),
                 const SizedBox(width: 10),
                 Expanded(
-                    child:
-                    Text('Billa Hagenberg, Hauptstraße 16', overflow: TextOverflow.ellipsis,
-                    style: theme.textTheme.titleMedium)),
+                    child: Text('Billa Hagenberg, Hauptstraße 16',
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.titleMedium)),
               ],
             ),
           ),
@@ -80,6 +80,15 @@ class _AppBarStoreTitle extends StatelessWidget {
       ),
     );
   }
+
+  void _storeTapped(
+          BuildContext context, int companyNumber, int storeNumber) =>
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => StoreDetail(
+              key: ValueKey(
+                  '${newsItem.companyNumber}.${newsItem.storeNumber}_store_detail'),
+              storeNumber: newsItem.storeNumber,
+              companyNumber: newsItem.companyNumber)));
 }
 
 class _ItemExpired extends StatelessWidget {
@@ -139,10 +148,7 @@ class _DetailTitle extends StatelessWidget {
         children: [
           Expanded(
             child: Text(newsItem.name,
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .headlineMedium,
+                style: Theme.of(context).textTheme.headlineMedium,
                 overflow: TextOverflow.ellipsis),
           ),
           NewsItemExpiredIcon(newsItem: newsItem)
@@ -166,19 +172,16 @@ class _DetailsText extends StatelessWidget {
       padding: const EdgeInsets.all(InsetSizes.small),
       child: Card(
           child: Container(
-            padding: const EdgeInsets.all(InsetSizes.small),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Details'.i18n,
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .headlineMedium),
-                Text(newsItem.markdownContent),
-              ],
-            ),
-          )),
+        padding: const EdgeInsets.all(InsetSizes.small),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Details'.i18n,
+                style: Theme.of(context).textTheme.headlineMedium),
+            Text(newsItem.markdownContent),
+          ],
+        ),
+      )),
     );
   }
 }
