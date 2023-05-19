@@ -14,30 +14,32 @@ class NewsItemList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: newsItems.length,
-      itemBuilder: (context, index) {
-        final newsItem = newsItems[index];
+    return Expanded(
+      child: ListView.builder(
+        itemCount: newsItems.length,
+        itemBuilder: (context, index) {
+          final newsItem = newsItems[index];
 
-        return Card(
-          key: ValueKey('$newsItem.id_listItem'),
-          child: ListTile(
-            onTap: () => _itemTapped(context, newsItem),
-            contentPadding: const EdgeInsets.only(
-                right: InsetSizes.small,
-                top: InsetSizes.medium,
-                bottom: InsetSizes.medium),
-            horizontalTitleGap: 4.0,
-            titleAlignment: ListTileTitleAlignment.center,
-            leading: _leadingIcon(context),
-            title: Text(newsItem.name,
-                maxLines: 1, overflow: TextOverflow.ellipsis),
-            subtitle: Text(newsItem.markdownContent,
-                maxLines: 2, overflow: TextOverflow.ellipsis),
-            trailing: _seenExpiresInfo(newsItem),
-          ),
-        );
-      },
+          return Card(
+            key: ValueKey('$newsItem.id_listItem'),
+            child: ListTile(
+              onTap: () => _itemTapped(context, newsItem),
+              contentPadding: const EdgeInsets.only(
+                  right: InsetSizes.small,
+                  top: InsetSizes.medium,
+                  bottom: InsetSizes.medium),
+              horizontalTitleGap: 4.0,
+              titleAlignment: ListTileTitleAlignment.center,
+              leading: _leadingIcon(context),
+              title: Text(newsItem.name,
+                  maxLines: 1, overflow: TextOverflow.ellipsis),
+              subtitle: Text(newsItem.markdownContent,
+                  maxLines: 2, overflow: TextOverflow.ellipsis),
+              trailing: _seenExpiresInfo(newsItem),
+            ),
+          );
+        },
+      ),
     );
   }
 

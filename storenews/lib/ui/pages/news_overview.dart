@@ -5,6 +5,7 @@ import 'package:i18n_extension/default.i18n.dart';
 import 'package:storenews/domain/news_item.dart';
 import 'package:storenews/ui/widgets/bt_settings_button.dart';
 import 'package:storenews/ui/widgets/news_item_list.dart';
+import 'package:storenews/util/constants.dart';
 
 class NewsOverview extends StatelessWidget {
   NewsOverview({super.key});
@@ -45,11 +46,41 @@ class NewsOverview extends StatelessWidget {
           title: Text('Store News'.i18n),
           actions: const [BtSettingsButton()],
         ),
-        body: Visibility(
-          visible: newsItems.isEmpty,
-          replacement: NewsItemList(newsItems: newsItems),
-          child: const _NewsNotFound(),
+        body: Column(
+          children: [
+            _ScanNotRunning(isScanning: true), // TODO connect state
+            Visibility(
+              visible: newsItems.isEmpty,
+              replacement: NewsItemList(newsItems: newsItems),
+              child: const _NewsNotFound(),
+            ),
+          ],
         ));
+  }
+}
+
+class _ScanNotRunning extends StatelessWidget {
+  final bool isScanning;
+
+  const _ScanNotRunning({super.key, required this.isScanning});
+
+  @override
+  Widget build(BuildContext context) {
+    return Visibility(
+      visible: !isScanning,
+      child: Container(
+        alignment: Alignment.topRight,
+        padding: const EdgeInsets.only(right: InsetSizes.medium),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text('Restart scanning to get the latest news'.i18n),
+            const SizedBox(width: InsetSizes.small),
+            const Icon(Icons.switch_access_shortcut)
+          ],
+        ),
+      ),
+    );
   }
 }
 
