@@ -21,6 +21,9 @@ class NewsItem {
     this.detailImageId,
   });
 
+  isExpired(DateTime currentTime) =>
+      expires != null && currentTime.isAfter(expires!);
+
   factory NewsItem.fromJson(Map<String, dynamic> json) {
     return NewsItem(
       id: json['id'] as String,
@@ -29,7 +32,9 @@ class NewsItem {
       storeNumber: json['storeNumber'] as int,
       companyNumber: json['companyNumber'] as int,
       lastChanged: DateTime.parse(json['lastChanged'] as String),
-      expires: json['expires'] == null ? null : DateTime.parse(json['expires'] as String),
+      expires: json['expires'] == null
+          ? null
+          : DateTime.parse(json['expires'] as String),
       detailImageId: json['detailImageId'] as String?,
     );
   }

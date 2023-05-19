@@ -4,6 +4,7 @@ import 'package:storenews/domain/news_item.dart';
 import 'package:storenews/ui/widgets/news_item_expires_icon.dart';
 import 'package:storenews/util/dynamic_datetime_format.dart';
 
+import '../../util/constants.dart';
 import '../pages/news_detail.dart';
 
 class NewsItemList extends StatelessWidget {
@@ -21,11 +22,13 @@ class NewsItemList extends StatelessWidget {
         return Card(
           key: ValueKey('$newsItem.id_listItem'),
           child: ListTile(
-            contentPadding:
-                const EdgeInsets.only(right: 8.0, top: 10.0, bottom: 10.0),
+            onTap: () => _itemTapped(context, newsItem),
+            contentPadding: const EdgeInsets.only(
+                right: InsetSizes.small,
+                top: InsetSizes.medium,
+                bottom: InsetSizes.medium),
             horizontalTitleGap: 4.0,
             titleAlignment: ListTileTitleAlignment.center,
-            onTap: () => _itemTapped(context, newsItem),
             leading: _leadingIcon(context),
             title: Text(newsItem.name,
                 maxLines: 1, overflow: TextOverflow.ellipsis),
@@ -42,7 +45,7 @@ class NewsItemList extends StatelessWidget {
     return IconButton(
       icon: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50.0),
+              borderRadius: BorderRadius.circular(BorderSizes.circularRadius),
               color: Theme.of(context).colorScheme.surface),
           child: const Icon(Icons.more_horiz_rounded)),
       onPressed: () {}, // TODO add link to store

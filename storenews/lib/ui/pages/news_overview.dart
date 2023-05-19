@@ -16,7 +16,8 @@ class NewsOverview extends StatelessWidget {
         lastChanged: DateTime.now(),
         companyNumber: 1,
         storeNumber: 1,
-        id: '1')..scannedAt = DateTime.now(),
+        id: '1')
+      ..scannedAt = DateTime.now(),
     NewsItem(
         name: 'News Item 2aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
         markdownContent:
@@ -39,19 +40,26 @@ class NewsOverview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: const Icon(Icons.business_center),
-        title: Text('Store News'.i18n),
-        actions: const [BtSettingsButton()],
-      ),
-      body: Visibility(
+        appBar: AppBar(
+          leading: const Icon(Icons.business_center),
+          title: Text('Store News'.i18n),
+          actions: const [BtSettingsButton()],
+        ),
+        body: Visibility(
           visible: newsItems.isEmpty,
           replacement: NewsItemList(newsItems: newsItems),
-          child: _noNewsFound(context)),
-    );
+          child: const _NewsNotFound(),
+        ));
   }
+}
 
-  Widget _noNewsFound(BuildContext context) {
+class _NewsNotFound extends StatelessWidget {
+  const _NewsNotFound({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return Container(

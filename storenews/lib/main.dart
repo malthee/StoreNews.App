@@ -31,9 +31,9 @@ class StoreNewsApp extends StatelessWidget {
       supportedLocales: const [
         Locale('en', 'US')
       ],
-      theme: ThemeData(
-        useMaterial3: true,
-      ),
+      theme: ThemeData.from(colorScheme: lightColorScheme, useMaterial3: true),
+      darkTheme: ThemeData.dark(useMaterial3: true),
+      themeMode: ThemeMode.light,
       home: NewsOverview(),
     );
   }
