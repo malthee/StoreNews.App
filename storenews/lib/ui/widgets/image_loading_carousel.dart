@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:storenews/util/constants.dart';
 
 class ImageLoadingCarousel extends StatefulWidget {
   final List<String> imageUrls;
@@ -78,9 +79,9 @@ class _CarouselDots extends StatelessWidget {
         return GestureDetector(
           onTap: () => controller.animateToPage(i),
           child: Container(
-            width: 12.0,
-            height: 12.0,
-            margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+            width: 9.0,
+            height: 9.0,
+            margin: const EdgeInsets.symmetric(vertical: InsetSizes.medium, horizontal: 4.0),
             decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: (Theme.of(context).brightness == Brightness.dark

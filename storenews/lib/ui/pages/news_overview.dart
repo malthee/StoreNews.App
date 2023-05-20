@@ -27,7 +27,8 @@ class NewsOverview extends StatelessWidget {
         companyNumber: 1,
         storeNumber: 1,
         id: '2',
-        expires: DateTime.now().subtract(const Duration(days: 1))),
+        expires: DateTime.now().subtract(const Duration(days: 1)))
+      ..scannedAt = DateTime.now().subtract(const Duration(minutes: 2)),
     NewsItem(
         name: 'News Item 3',
         markdownContent: 'News Item 3 Description #HELLO and so on',
@@ -35,7 +36,8 @@ class NewsOverview extends StatelessWidget {
         companyNumber: 1,
         storeNumber: 1,
         id: '3',
-        expires: DateTime.now().add(const Duration(days: 1))),
+        expires: DateTime.now().add(const Duration(days: 1)))
+      ..scannedAt = DateTime.now().subtract(const Duration(minutes: 20)),
     NewsItem(
         name: 'News Item 4',
         markdownContent: 'News Item 4 Description #HELLO and so on',
@@ -43,7 +45,8 @@ class NewsOverview extends StatelessWidget {
         companyNumber: 1,
         storeNumber: 1,
         id: '4',
-        expires: DateTime.now().add(const Duration(days: 1))),
+        expires: DateTime.now().add(const Duration(days: 1)))
+      ..scannedAt = DateTime.now().subtract(const Duration(hours: 4)),
     NewsItem(
         name: 'News Item 5',
         markdownContent: 'News Item 5 Description #HELLO and so on',
@@ -51,7 +54,8 @@ class NewsOverview extends StatelessWidget {
         companyNumber: 1,
         storeNumber: 1,
         id: '5',
-        expires: DateTime.now().add(const Duration(days: 1))),
+        expires: DateTime.now().add(const Duration(days: 1)))
+      ..scannedAt = DateTime.now().subtract(const Duration(hours: 6)),
     NewsItem(
         name: 'News Item 6',
         markdownContent: 'News Item 6 Description #HELLO and so on',
@@ -59,7 +63,8 @@ class NewsOverview extends StatelessWidget {
         companyNumber: 1,
         storeNumber: 1,
         id: '6',
-        expires: DateTime.now().add(const Duration(days: 1))),
+        expires: DateTime.now().add(const Duration(days: 1)))
+      ..scannedAt = DateTime.now().subtract(const Duration(days: 4)),
   ];
 
   @override
@@ -74,8 +79,9 @@ class NewsOverview extends StatelessWidget {
         body: Column(
           children: [
             // TODO also show latest images
-            _ScanNotRunning(isScanning: false), // TODO connect state
-            Expanded(child: NewsItemList(newsItems: newsItems)),
+            _ScanNotRunning(isScanning: true), // TODO connect state
+            Expanded(
+                child: NewsItemList(newsItems: newsItems, showTimeAgo: true)),
           ],
         ));
   }

@@ -12,11 +12,20 @@ import '../pages/store_detail.dart';
 class NewsItemList extends StatelessWidget {
   final List<NewsItem> newsItems;
   final ScrollPhysics? scrollPhysics;
+  final bool showTimeAgo;
 
-  const NewsItemList({super.key, required this.newsItems, this.scrollPhysics});
+  const NewsItemList(
+      {super.key,
+      required this.newsItems,
+      this.scrollPhysics,
+      this.showTimeAgo = false});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final currentDateTime = DateTime.now();
+    String? lastScannedAgoString; // Used for showing .. time ago
+
     return Visibility(
       visible: newsItems.isNotEmpty,
       replacement: const _NewsNotFound(),
@@ -26,24 +35,40 @@ class NewsItemList extends StatelessWidget {
         itemCount: newsItems.length,
         itemBuilder: (context, index) {
           final newsItem = newsItems[index];
+          // Create a string to group the news items by time ago
+          final agoString =
+              _scannedTimeAgoString(currentDateTime, newsItem.scannedAt);
+          final showAgoTitle = showTimeAgo && lastScannedAgoString != agoString;
+          lastScannedAgoString = agoString;
 
-          return Card(
-            key: ValueKey('$newsItem.id_listItem'),
-            child: ListTile(
-              onTap: () => _newsItemTapped(context, newsItem),
-              contentPadding: const EdgeInsets.only(
-                  right: InsetSizes.small,
-                  top: InsetSizes.medium,
-                  bottom: InsetSizes.medium),
-              horizontalTitleGap: 4.0,
-              titleAlignment: ListTileTitleAlignment.center,
-              leading: _StoreIconNavigator(newsItem: newsItem),
-              title: Text(newsItem.name,
-                  maxLines: 1, overflow: TextOverflow.ellipsis),
-              subtitle: Text(newsItem.markdownContent,
-                  maxLines: 2, overflow: TextOverflow.ellipsis),
-              trailing: _SeenExpiresInfo(newsItem: newsItem),
-            ),
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Visibility(
+                  visible: showAgoTitle,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: InsetSizes.medium, top: InsetSizes.medium),
+                    child: Text(agoString, style: theme.textTheme.titleLarge),
+                  )),
+              Card(
+                key: ValueKey('$newsItem.id_listItem'),
+                child: ListTile(
+                  onTap: () => _newsItemTapped(context, newsItem),
+                  contentPadding: const EdgeInsets.only(
+                      right: InsetSizes.small,
+                      top: InsetSizes.medium,
+                      bottom: InsetSizes.medium),
+                  horizontalTitleGap: 4.0,
+                  titleAlignment: ListTileTitleAlignment.center,
+                  leading: _StoreIconNavigator(newsItem: newsItem),
+                  title: Text(newsItem.name,
+                      maxLines: 1, overflow: TextOverflow.ellipsis),
+                  subtitle: Text(newsItem.markdownContent,
+                      maxLines: 2, overflow: TextOverflow.ellipsis),
+                  trailing: _SeenExpiresInfo(newsItem: newsItem),
+                ),
+              ),
+            ],
           );
         },
       ),
@@ -54,6 +79,21 @@ class NewsItemList extends StatelessWidget {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => NewsDetail(
             key: ValueKey('$newsItem.id_detail'), newsItem: newsItem)));
+  }
+
+  String _scannedTimeAgoString(DateTime currentDateTime, DateTime? dateTime) {
+    if (dateTime == null) return 'Unknown'.i18n;
+    final difference = currentDateTime.difference(dateTime);
+
+    if (difference.inDays > 0) {
+      return 'Older'.i18n;
+    } else if (difference.inHours > 0) {
+      return 'Hours ago'.i18n;
+    } else if (difference.inMinutes > 0) {
+      return 'A few minutes ago'.i18n;
+    } else {
+      return 'Just now'.i18n;
+    }
   }
 }
 

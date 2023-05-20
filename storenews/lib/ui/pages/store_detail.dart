@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:i18n_extension/default.i18n.dart';
 import 'package:storenews/ui/widgets/image_loading_carousel.dart';
 import 'package:storenews/ui/widgets/news_item_list.dart';
 import 'package:storenews/ui/widgets/store_icon_name.dart';
@@ -65,9 +66,19 @@ class StoreDetail extends StatelessWidget {
             Expanded(
               child: SingleChildScrollView(
                   child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ImageLoadingCarousel(imageUrls: []),
-                  const Divider(),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        top: InsetSizes.medium,
+                        left: InsetSizes.medium,
+                        right: InsetSizes.medium,
+                        bottom: InsetSizes.small),
+                    child: Text('Latest news from this store'.i18n,
+                        textAlign: TextAlign.start,
+                        style: theme.textTheme.titleLarge),
+                  ),
                   NewsItemList(
                       newsItems: newsItems,
                       // Disable scrolling as is handled by SingleChildScrollView
