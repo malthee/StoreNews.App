@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
@@ -23,48 +25,71 @@ class _ImageLoadingCarouselState extends State<ImageLoadingCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Carousel with indicator controller demo')),
-      body: Column(children: [
-        Expanded(
-          child: CarouselSlider(
-            items: <Image>[
-              Image.network(images[0], fit: BoxFit.cover),
-              Image.network(images[1], fit: BoxFit.cover),
-              Image.network(images[2], fit: BoxFit.cover),
-            ],
-            carouselController: _controller,
-            options: CarouselOptions(
-                autoPlay: true,
-                enlargeCenterPage: true,
-                aspectRatio: 2.0,
-                onPageChanged: (index, reason) {
-                  setState(() {
-                    _current = index;
-                  });
-                }),
+    final size = MediaQuery.of(context).size;
+    final orientation = MediaQuery.of(context).orientation;
+    // Use third or big size in landscape mode
+    final carouselHeight = orientation == Orientation.portrait
+        ? size.height / 3
+        : size.height / 1.4;
+
+    return Column(children: [
+      CarouselSlider(
+        items: [
+          Image.network(images[0],
+              fit: BoxFit.cover, width: double.infinity),
+          Image.network(images[1],
+              fit: BoxFit.cover, width: double.infinity),
+          Image.network(images[2],
+              fit: BoxFit.cover, width: double.infinity),
+        ],
+        carouselController: _controller,
+        options: CarouselOptions(
+            height: carouselHeight,
+            viewportFraction: 1.0,
+            enlargeCenterPage: true,
+            onPageChanged: (index, reason) {
+              setState(() {
+                _current = index;
+              });
+            }),
+      ),
+      _CarouselDots(
+          count: images.length, controller: _controller, current: _current),
+    ]);
+  }
+}
+
+class _CarouselDots extends StatelessWidget {
+  const _CarouselDots({
+    super.key,
+    required this.count,
+    required this.controller,
+    required this.current,
+  });
+
+  final int count, current;
+  final CarouselController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: Iterable<int>.generate(count).map((i) {
+        return GestureDetector(
+          onTap: () => controller.animateToPage(i),
+          child: Container(
+            width: 12.0,
+            height: 12.0,
+            margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+            decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: (Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : Colors.black)
+                    .withOpacity(current == i ? 0.9 : 0.4)),
           ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: images.asMap().entries.map((entry) {
-            return GestureDetector(
-              onTap: () => _controller.animateToPage(entry.key),
-              child: Container(
-                width: 12.0,
-                height: 12.0,
-                margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: (Theme.of(context).brightness == Brightness.dark
-                            ? Colors.white
-                            : Colors.black)
-                        .withOpacity(_current == entry.key ? 0.9 : 0.4)),
-              ),
-            );
-          }).toList(),
-        ),
-      ]),
+        );
+      }).toList(),
     );
   }
 }

@@ -8,16 +8,21 @@ import '../../util/constants.dart';
 import '../pages/news_detail.dart';
 import '../pages/store_detail.dart';
 
+/// Shows either a list of [NewsItem]s or a message that there are none
 class NewsItemList extends StatelessWidget {
   final List<NewsItem> newsItems;
+  final ScrollPhysics? scrollPhysics;
 
-  const NewsItemList({super.key, required this.newsItems});
+  const NewsItemList({super.key, required this.newsItems, this.scrollPhysics});
 
-  // TODO may also implement the replacement of visible here
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return Visibility(
+      visible: newsItems.isNotEmpty,
+      replacement: const _NewsNotFound(),
       child: ListView.builder(
+        physics: scrollPhysics,
+        shrinkWrap: true,
         itemCount: newsItems.length,
         itemBuilder: (context, index) {
           final newsItem = newsItems[index];
@@ -102,6 +107,44 @@ class _SeenExpiresInfo extends StatelessWidget {
           const Text(''), // Same height as scannedAt text
         NewsItemExpiredIcon(newsItem: newsItem),
       ],
+    );
+  }
+}
+
+class _NewsNotFound extends StatelessWidget {
+  const _NewsNotFound({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Container(
+      alignment: Alignment.center,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.article_outlined,
+            size: 80,
+            color: theme.disabledColor,
+          ),
+          const SizedBox(height: 16.0),
+          Text(
+            "No news items available".i18n,
+            style: theme.textTheme.headlineSmall,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 8.0),
+          Text(
+            "Visit some locations and make sure scanning is enabled.".i18n,
+            style: theme.textTheme.bodyMedium!
+                .merge(TextStyle(color: theme.disabledColor)),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
     );
   }
 }

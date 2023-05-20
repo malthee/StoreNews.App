@@ -6,6 +6,7 @@ import 'package:storenews/ui/widgets/news_item_expires_icon.dart';
 import 'package:storenews/util/dynamic_datetime_format.dart';
 
 import '../../util/constants.dart';
+import '../widgets/store_icon_name.dart';
 
 class NewsDetail extends StatelessWidget {
   final NewsItem newsItem;
@@ -64,25 +65,16 @@ class _AppBarStoreTitle extends StatelessWidget {
           borderRadius: BorderRadius.circular(BorderSizes.circularRadius),
           child: Padding(
             padding: const EdgeInsets.all(InsetSizes.small),
-            child: Row(
-              children: [
-                // TODO load ico from store
-                const Icon(Icons.business_center),
-                const SizedBox(width: 10),
-                Expanded(
-                    child: Text('Billa Hagenberg, Hauptstraße 16',
-                        overflow: TextOverflow.ellipsis,
-                        style: theme.textTheme.titleMedium)),
-              ],
-            ),
+            child: StoreIconName(
+                companyNumber: newsItem.companyNumber,
+                storeNumber: newsItem.storeNumber),
           ),
         ),
       ),
     );
   }
 
-  void _storeTapped(
-          BuildContext context, int companyNumber, int storeNumber) =>
+  void _storeTapped(BuildContext context, int companyNumber, int storeNumber) =>
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => StoreDetail(
               key: ValueKey(

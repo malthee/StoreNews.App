@@ -36,6 +36,30 @@ class NewsOverview extends StatelessWidget {
         storeNumber: 1,
         id: '3',
         expires: DateTime.now().add(const Duration(days: 1))),
+    NewsItem(
+        name: 'News Item 4',
+        markdownContent: 'News Item 4 Description #HELLO and so on',
+        lastChanged: DateTime.now(),
+        companyNumber: 1,
+        storeNumber: 1,
+        id: '4',
+        expires: DateTime.now().add(const Duration(days: 1))),
+    NewsItem(
+        name: 'News Item 5',
+        markdownContent: 'News Item 5 Description #HELLO and so on',
+        lastChanged: DateTime.now(),
+        companyNumber: 1,
+        storeNumber: 1,
+        id: '5',
+        expires: DateTime.now().add(const Duration(days: 1))),
+    NewsItem(
+        name: 'News Item 6',
+        markdownContent: 'News Item 6 Description #HELLO and so on',
+        lastChanged: DateTime.now(),
+        companyNumber: 1,
+        storeNumber: 1,
+        id: '6',
+        expires: DateTime.now().add(const Duration(days: 1))),
   ];
 
   @override
@@ -45,17 +69,13 @@ class NewsOverview extends StatelessWidget {
           leading: const Icon(Icons.business_center),
           title: Text('Store News'.i18n),
           // TODO scan toggle
-          actions: [BtSettingsButton(isScanning: true, onScanToggle: (){})],
+          actions: [BtSettingsButton(isScanning: true, onScanToggle: () {})],
         ),
         body: Column(
           children: [
             // TODO also show latest images
-            _ScanNotRunning(isScanning: true), // TODO connect state
-            Visibility(
-              visible: newsItems.isEmpty,
-              replacement: NewsItemList(newsItems: newsItems),
-              child: const _NewsNotFound(),
-            ),
+            _ScanNotRunning(isScanning: false), // TODO connect state
+            Expanded(child: NewsItemList(newsItems: newsItems)),
           ],
         ));
   }
@@ -81,44 +101,6 @@ class _ScanNotRunning extends StatelessWidget {
             const Icon(Icons.switch_access_shortcut)
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _NewsNotFound extends StatelessWidget {
-  const _NewsNotFound({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Container(
-      alignment: Alignment.center,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.article_outlined,
-            size: 80,
-            color: theme.disabledColor,
-          ),
-          const SizedBox(height: 16.0),
-          Text(
-            "No news items available".i18n,
-            style: theme.textTheme.headlineSmall,
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 8.0),
-          Text(
-            "Visit some locations and make sure scanning is enabled.".i18n,
-            style: theme.textTheme.bodyMedium!
-                .merge(TextStyle(color: theme.disabledColor)),
-            textAlign: TextAlign.center,
-          ),
-        ],
       ),
     );
   }
