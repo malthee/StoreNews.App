@@ -16,8 +16,21 @@ void setupGetIt() {
   //getIt.registerSingleton(instance)
 }
 
-class StoreNewsApp extends StatelessWidget {
+class StoreNewsApp extends StatefulWidget {
   const StoreNewsApp({super.key});
+
+  @override
+  State<StoreNewsApp> createState() => _StoreNewsAppState();
+}
+
+class _StoreNewsAppState extends State<StoreNewsApp> {
+  bool darkModeEnabled = false;
+
+  void toggleDarkMode(bool enabled) {
+    setState(() {
+      darkModeEnabled = enabled;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,13 +41,11 @@ class StoreNewsApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate
       ],
-      supportedLocales: const [
-        Locale('en', 'US')
-      ],
+      supportedLocales: const [Locale('en', 'US')],
       theme: ThemeData.from(colorScheme: lightColorScheme, useMaterial3: true),
       darkTheme: ThemeData.dark(useMaterial3: true),
-      themeMode: ThemeMode.light,
-      home: NewsOverview(),
+      themeMode: darkModeEnabled ? ThemeMode.dark : ThemeMode.light,
+      home: NewsOverview(onDarkModeToggle: toggleDarkMode),
     );
   }
 }

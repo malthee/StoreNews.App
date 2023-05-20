@@ -30,8 +30,8 @@ class NewsItemList extends StatelessWidget {
       visible: newsItems.isNotEmpty,
       replacement: const _NewsNotFound(),
       child: ListView.builder(
-        physics: scrollPhysics,
         shrinkWrap: true,
+        physics: scrollPhysics,
         itemCount: newsItems.length,
         itemBuilder: (context, index) {
           final newsItem = newsItems[index];

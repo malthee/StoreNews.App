@@ -8,7 +8,9 @@ import 'package:storenews/ui/widgets/news_item_list.dart';
 import 'package:storenews/util/constants.dart';
 
 class NewsOverview extends StatelessWidget {
-  NewsOverview({super.key});
+  final Function(bool) onDarkModeToggle;
+
+  NewsOverview({super.key, required this.onDarkModeToggle});
 
   final newsItems = <NewsItem>[
     NewsItem(
@@ -69,12 +71,23 @@ class NewsOverview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final darkModeEnabled = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
         appBar: AppBar(
           leading: const Icon(Icons.business_center),
           title: Text('Store News'.i18n),
           // TODO scan toggle
-          actions: [BtSettingsButton(isScanning: true, onScanToggle: () {})],
+          actions: [
+            IconButton(
+                onPressed: () => onDarkModeToggle(!darkModeEnabled),
+                icon: Visibility(
+                  visible: darkModeEnabled,
+                  replacement: const Icon(Icons.dark_mode),
+                  child: const Icon(Icons.light_mode),
+                )),
+            BtSettingsButton(isScanning: true, onScanToggle: () {})
+          ],
         ),
         body: Column(
           children: [
