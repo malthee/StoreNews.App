@@ -47,7 +47,7 @@ class NewsItemList extends StatelessWidget {
               Visibility(
                   visible: showAgoTitle,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: InsetSizes.medium, top: InsetSizes.medium),
+                    padding: const EdgeInsets.only(left: InsetSizes.medium, top: InsetSizes.medium, bottom: InsetSizes.small),
                     child: Text(agoString, style: theme.textTheme.titleLarge),
                   )),
               Card(
