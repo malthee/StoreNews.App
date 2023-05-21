@@ -15,11 +15,12 @@ class StoreIconName extends StatelessWidget {
 
     return Row(
       children: [
-        // TODO load ico from store
+        // TODO load ico from company
         const Icon(Icons.business_center),
         const SizedBox(width: 10),
         Expanded(
-            child: Text('Billa Hagenberg, Hauptstraße 16',
+            // TODO Company name + store name
+            child: Text('Billa - Hagenberg',
                 overflow: TextOverflow.ellipsis,
                 style: theme.textTheme.titleMedium)),
       ],

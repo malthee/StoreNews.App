@@ -104,6 +104,7 @@ class _StoreIconNavigator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO icon from company, may own component with store_icon_name
     return IconButton(
       onPressed: () => _storeIconTapped(
           context, newsItem.companyNumber, newsItem.storeNumber),
