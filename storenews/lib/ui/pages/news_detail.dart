@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:i18n_extension/default.i18n.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:storenews/domain/news_item.dart';
 import 'package:storenews/ui/pages/store_detail.dart';
 import 'package:storenews/ui/widgets/news_item_expires_icon.dart';
@@ -26,10 +27,7 @@ class NewsDetail extends StatelessWidget {
           children: [
             _ItemExpired(newsItem: newsItem),
             _DetailTitle(newsItem: newsItem),
-            Image(
-                // TODO load online
-                image: Image.network("https://i.imgur.com/p39jy0N.jpg").image,
-                fit: BoxFit.contain),
+            _DetailImageView(),
             Center(
                 child: Text('last changed %s'
                     .i18n
@@ -38,6 +36,24 @@ class NewsDetail extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _DetailImageView extends StatelessWidget {
+  const _DetailImageView({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return PhotoView(
+      tightMode: true,
+      minScale: PhotoViewComputedScale.contained * 0.5,
+      maxScale: PhotoViewComputedScale.contained * 2,
+      // TODO load online
+      imageProvider:
+          Image.network("https://i.imgur.com/p39jy0N.jpg").image,
     );
   }
 }
