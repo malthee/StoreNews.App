@@ -75,7 +75,10 @@ class NewsOverview extends StatelessWidget {
 
     return Scaffold(
         appBar: AppBar(
-          leading: const Icon(Icons.business_center),
+          leading: const Padding(
+            padding: EdgeInsets.all(InsetSizes.small),
+            child: Image(image: AssetImage('assets/icon/storenews.png')),
+          ),
           title: Text('Store News'.i18n),
           // TODO scan toggle
           actions: [
