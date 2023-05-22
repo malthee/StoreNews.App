@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
-import 'package:i18n_extension/default.i18n.dart';
 import 'package:storenews/ui/pages/news_overview.dart';
 import 'package:storenews/util/constants.dart';
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:i18n_extension/default.i18n.dart';
 import '../../domain/news_item.dart';
 import '../../util/dynamic_datetime_format.dart';
+import '../../i18n/news_item_expires.i18n.dart';
 
 class NewsItemExpiredIcon extends StatelessWidget {
   final NewsItem newsItem;

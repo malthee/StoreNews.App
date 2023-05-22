@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:i18n_extension/default.i18n.dart';
+import '../../i18n/bt_settings.i18n.dart';
 
 class BtSettingsButton extends StatelessWidget {
   final bool isScanning;

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:i18n_extension/default.i18n.dart';
 import 'package:storenews/ui/widgets/image_loading_carousel.dart';
 import 'package:storenews/ui/widgets/news_item_list.dart';
 import 'package:storenews/ui/widgets/store_icon_name.dart';
 
 import '../../domain/news_item.dart';
 import '../../util/constants.dart';
+import '../../i18n/store_detail.i18n.dart';
 
 class StoreDetail extends StatelessWidget {
   final int companyNumber, storeNumber;

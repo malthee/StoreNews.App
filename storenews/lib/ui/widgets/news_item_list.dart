@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:i18n_extension/default.i18n.dart';
 import 'package:storenews/domain/news_item.dart';
 import 'package:storenews/ui/widgets/news_item_expires_icon.dart';
 import 'package:storenews/util/dynamic_datetime_format.dart';
@@ -7,6 +6,7 @@ import 'package:storenews/util/dynamic_datetime_format.dart';
 import '../../util/constants.dart';
 import '../pages/news_detail.dart';
 import '../pages/store_detail.dart';
+import '../../i18n/news_item_list.i18n.dart';
 
 /// Shows either a list of [NewsItem]s or a message that there are none
 class NewsItemList extends StatelessWidget {

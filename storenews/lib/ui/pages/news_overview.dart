@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
-// Replace with translations for multiple language support
-import 'package:i18n_extension/default.i18n.dart';
 import 'package:storenews/domain/news_item.dart';
 import 'package:storenews/ui/widgets/bt_settings_button.dart';
 import 'package:storenews/ui/widgets/news_item_list.dart';
 import 'package:storenews/util/constants.dart';
+import '../../i18n/news_overview.i18n.dart';
 
 class NewsOverview extends StatelessWidget {
   final Function(bool) onDarkModeToggle;
@@ -79,7 +78,7 @@ class NewsOverview extends StatelessWidget {
             padding: EdgeInsets.all(InsetSizes.small),
             child: Image(image: AssetImage('assets/icon/storenews.png')),
           ),
-          title: Text('Store News'.i18n),
+          title: const Text('Store News'),
           // TODO scan toggle
           actions: [
             IconButton(

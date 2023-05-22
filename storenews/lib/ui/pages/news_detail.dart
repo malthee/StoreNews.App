@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:i18n_extension/default.i18n.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:storenews/domain/news_item.dart';
 import 'package:storenews/ui/pages/store_detail.dart';
@@ -8,6 +7,7 @@ import 'package:storenews/util/dynamic_datetime_format.dart';
 
 import '../../util/constants.dart';
 import '../widgets/store_icon_name.dart';
+import '../../i18n/news_detail.i18n.dart';
 
 class NewsDetail extends StatelessWidget {
   final NewsItem newsItem;
