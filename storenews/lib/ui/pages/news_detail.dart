@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:storenews/domain/news_item.dart';
-import 'package:storenews/ui/pages/store_detail.dart';
 import 'package:storenews/ui/widgets/news_item_expires_icon.dart';
 import 'package:storenews/util/dynamic_datetime_format.dart';
+import 'package:storenews/util/navigation_helper.dart';
 
 import '../../util/constants.dart';
 import '../widgets/store_icon_name.dart';
@@ -52,8 +52,7 @@ class _DetailImageView extends StatelessWidget {
       minScale: PhotoViewComputedScale.contained * 0.5,
       maxScale: PhotoViewComputedScale.contained * 2,
       // TODO load online
-      imageProvider:
-          Image.network("https://i.imgur.com/p39jy0N.jpg").image,
+      imageProvider: Image.network("https://i.imgur.com/p39jy0N.jpg").image,
     );
   }
 }
@@ -91,12 +90,7 @@ class _AppBarStoreTitle extends StatelessWidget {
   }
 
   void _storeTapped(BuildContext context, int companyNumber, int storeNumber) =>
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => StoreDetail(
-              key: ValueKey(
-                  '${newsItem.companyNumber}.${newsItem.storeNumber}_store_detail'),
-              storeNumber: newsItem.storeNumber,
-              companyNumber: newsItem.companyNumber)));
+      navigateToStore(context, companyNumber, storeNumber);
 }
 
 class _ItemExpired extends StatelessWidget {

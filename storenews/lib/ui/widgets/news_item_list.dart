@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:storenews/domain/news_item.dart';
 import 'package:storenews/ui/widgets/news_item_expires_icon.dart';
 import 'package:storenews/util/dynamic_datetime_format.dart';
+import 'package:storenews/util/navigation_helper.dart';
 
 import '../../util/constants.dart';
-import '../pages/news_detail.dart';
-import '../pages/store_detail.dart';
 import '../../i18n/news_item_list.i18n.dart';
 
 /// Shows either a list of [NewsItem]s or a message that there are none
@@ -47,7 +46,10 @@ class NewsItemList extends StatelessWidget {
               Visibility(
                   visible: showAgoTitle,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: InsetSizes.medium, top: InsetSizes.medium, bottom: InsetSizes.small),
+                    padding: const EdgeInsets.only(
+                        left: InsetSizes.medium,
+                        top: InsetSizes.medium,
+                        bottom: InsetSizes.small),
                     child: Text(agoString, style: theme.textTheme.titleLarge),
                   )),
               Card(
@@ -76,9 +78,7 @@ class NewsItemList extends StatelessWidget {
   }
 
   void _newsItemTapped(BuildContext context, NewsItem newsItem) {
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => NewsDetail(
-            key: ValueKey('$newsItem.id_detail'), newsItem: newsItem)));
+      navigateToNewsDetail(context, newsItem);
   }
 
   String _scannedTimeAgoString(DateTime currentDateTime, DateTime? dateTime) {
@@ -118,12 +118,7 @@ class _StoreIconNavigator extends StatelessWidget {
 
   void _storeIconTapped(
           BuildContext context, int companyNumber, int storeNumber) =>
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => StoreDetail(
-              key: ValueKey(
-                  '${newsItem.companyNumber}.${newsItem.storeNumber}_store_detail'),
-              storeNumber: newsItem.storeNumber,
-              companyNumber: newsItem.companyNumber)));
+      navigateToStore(context, companyNumber, storeNumber);
 }
 
 class _SeenExpiresInfo extends StatelessWidget {
