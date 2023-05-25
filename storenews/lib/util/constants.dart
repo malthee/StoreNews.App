@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 const appName = "Store News";
+const beaconNewsFetchInterval = Duration(minutes: 30);
 
 class InsetSizes {
   static const small = 8.0;

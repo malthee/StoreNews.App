@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
+import 'package:storenews/beacon/beacon_manager.dart';
 import 'package:storenews/ui/pages/news_overview.dart';
 import 'package:storenews/util/constants.dart';
 import 'package:storenews/util/service_setup.dart';
@@ -28,10 +29,7 @@ class StoreNewsApp extends StatefulWidget {
 class _StoreNewsAppState extends State<StoreNewsApp>
     with WidgetsBindingObserver {
   bool _darkModeEnabled = false;
-  bool _isScanning = false;
   bool _isInForeground = true;
-  final StreamController<String> beaconEventsController =
-      StreamController<String>.broadcast();
 
   void toggleDarkMode(bool enabled) {
     setState(() {
@@ -48,7 +46,6 @@ class _StoreNewsAppState extends State<StoreNewsApp>
 
   @override
   void dispose() {
-    beaconEventsController.close();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -62,56 +59,25 @@ class _StoreNewsAppState extends State<StoreNewsApp>
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
-    BeaconsPlugin.setDebugLevel(2);
+    print("haaaaoo");
+    await getIt.isReady<BeaconManager>();
+    final beaconsManager = await getIt.getAsync<BeaconManager>();
 
-    if (Platform.isAndroid) {
-      BeaconsPlugin.channel.setMethodCallHandler((call) async {
-        print("Method: ${call.method}");
-        if (call.method == 'scannerReady') {
-          await BeaconsPlugin.startMonitoring();
-          setState(() {
-            _isScanning = true;
-          });
-        }
-      });
-    } else if (Platform.isIOS) {
-      await BeaconsPlugin.startMonitoring();
-      setState(() {
-        _isScanning = true;
-      });
-    }
+    beaconsManager.beaconInformationStream.listen((beaconInfo) {
+      if (!_isInForeground) {
+        _showNotification("Beacons DataReceived: $beaconInfo");
+      } else {
+        debugPrint("Beacons DataReceived: $beaconInfo");
+      }
+    }, onDone: () {
+      debugPrint("DONE!!!!");
+    }, onError: (error) {
+      // TODO show error
+      debugPrint("Error: $error");
+    });
 
-    BeaconsPlugin.listenToBeacons(beaconEventsController);
-
-    // TODO UUID
-    await BeaconsPlugin.addRegion(
-        "BeaconType1", "acfd065e-c3c0-11e3-9bbe-1a514932ac01");
-
-    // TODO values from config
-    //BeaconsPlugin.setForegroundScanPeriodForAndroid(foregroundScanPeriod: 2200, foregroundBetweenScanPeriod: 10);
-    //BeaconsPlugin.setBackgroundScanPeriodForAndroid(backgroundScanPeriod: 2200, backgroundBetweenScanPeriod: 10);
-
-    beaconEventsController.stream.listen(
-        (data) {
-          if (data.isNotEmpty) {
-            debugPrint("Beacons DataReceived: " + data);
-
-            if (!_isInForeground) {
-              _showNotification("Beacons DataReceived: " + data);
-            }
-
-            print("Beacons DataReceived: " + data);
-          }
-        },
-        onDone: () {},
-        onError: (error) {
-          // TODO show error
-          print("Error: $error");
-        });
-
-    await BeaconsPlugin.runInBackground(true);
-
-    if (!mounted) return;
+    print("start");
+    await beaconsManager.startScanning();
   }
 
   int notifcounter = 0;
@@ -122,11 +88,15 @@ class _StoreNewsAppState extends State<StoreNewsApp>
 
     Future.delayed(Duration(seconds: 5)).then((result) async {
       var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-          'your channel id', 'your channel name', 'your channel description',
-          importance: Importance.low,
-          priority: Priority.low,
-          ticker: 'ticker',
-      playSound: false, enableVibration: false,);
+        'your channel id',
+        'your channel name',
+        'your channel description',
+        importance: Importance.low,
+        priority: Priority.low,
+        ticker: 'ticker',
+        playSound: false,
+        enableVibration: false,
+      );
       var iOSPlatformChannelSpecifics = IOSNotificationDetails();
       var platformChannelSpecifics = NotificationDetails(
           android: androidPlatformChannelSpecifics,
