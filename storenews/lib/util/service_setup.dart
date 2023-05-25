@@ -6,7 +6,7 @@ import 'package:storenews/beacon/beacon_manager.dart';
 void registerServices(GetIt getIt){
   getIt.registerLazySingleton<FlutterLocalNotificationsPlugin>(() => FlutterLocalNotificationsPlugin()
   ..initialize(const InitializationSettings(
-      android: AndroidInitializationSettings('@mipmap/launcher_icon'),
+      android: AndroidInitializationSettings('@mipmap/ic_launcher'),
       iOS: IOSInitializationSettings()
   )));
 
