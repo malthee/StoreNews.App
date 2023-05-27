@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:beacons_plugin/beacons_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -10,6 +9,7 @@ import 'package:storenews/beacon/beacon_manager.dart';
 import 'package:storenews/ui/pages/news_overview.dart';
 import 'package:storenews/util/constants.dart';
 import 'package:storenews/util/service_setup.dart';
+import 'package:http/http.dart' as http;
 
 final getIt = GetIt.instance;
 
@@ -57,15 +57,27 @@ class _StoreNewsAppState extends State<StoreNewsApp>
     initPlatformState();
   }
 
+
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
     print("haaaaoo");
     await getIt.isReady<BeaconManager>();
     final beaconsManager = await getIt.getAsync<BeaconManager>();
+    var lastnotif = DateTime.now();
 
     beaconsManager.beaconInformationStream.listen((beaconInfo) {
       if (!_isInForeground) {
-        _showNotification("Beacons DataReceived: $beaconInfo");
+        // proof of concept fetch
+        print("diff ${lastnotif.difference(DateTime.now()).inSeconds}");
+        if(lastnotif.difference(DateTime.now()).inSeconds < -10){
+          print("shisss HAPPEN!!!");
+          _showNotification("Beacons DataReceived: $beaconInfo");
+          http.get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1')).then((value) {
+            _showNotification("YAY: $value");
+            lastnotif = DateTime.now();
+          });
+        }
+
       }
 
       debugPrint("Beacons DataReceived: $beaconInfo");

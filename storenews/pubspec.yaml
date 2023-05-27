@@ -41,6 +41,8 @@ dependencies:
   flutter_local_notifications: ^8.2.0
   get_it: ^7.6.0
   get_it_mixin: ^4.2.0
+  http: ^1.0.0
+  permission_handler: ^10.2.0
 
 dev_dependencies:
   flutter_test:
