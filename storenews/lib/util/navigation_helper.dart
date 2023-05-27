@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:storenews/ui/widgets/permissions_missing_dialog.dart';
 
 import '../domain/news_item.dart';
 import '../ui/pages/news_detail.dart';
@@ -19,4 +20,9 @@ void navigateToNewsDetail(BuildContext context, NewsItem newsItem) {
   Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => NewsDetail(
           key: ValueKey('$newsItem.id_detail'), newsItem: newsItem)));
+}
+
+void showPermissionsMissingDialog(BuildContext context) {
+  showDialog(
+      context: context, builder: (context) => const PermissionsMissingDialog());
 }

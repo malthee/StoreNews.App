@@ -9,6 +9,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:storenews/beacon/beacon_manager.dart';
 import 'package:storenews/ui/pages/news_overview.dart';
 import 'package:storenews/util/constants.dart';
+import 'package:storenews/util/navigation_helper.dart';
 import 'package:storenews/util/service_setup.dart';
 import 'package:http/http.dart' as http;
 
@@ -32,6 +33,7 @@ class _StoreNewsAppState extends State<StoreNewsApp>
     with WidgetsBindingObserver {
   bool _darkModeEnabled = false;
   bool _isInForeground = true;
+  bool _showPermissionsMissingDialog = false;
 
   void toggleDarkMode(bool enabled) {
     setState(() {
@@ -46,6 +48,9 @@ class _StoreNewsAppState extends State<StoreNewsApp>
     setState(() {
       _isInForeground = state == AppLifecycleState.resumed;
     });
+
+    print("try to get manager again");
+    await getIt.isReady<BeaconManager>();
   }
 
   @override
@@ -61,18 +66,21 @@ class _StoreNewsAppState extends State<StoreNewsApp>
     initPlatformState();
   }
 
-  // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
-    print("haaaaoo");
+    // Try to initialize the BeaconManager, request permissions.
+    final beaconsManager =
+        await getIt.getAsync<BeaconManager>().catchError((e) {
+      debugPrint("BeaconManager not set up: $e");
+      setState(() {
+        _showPermissionsMissingDialog = true;
+      });
 
-    try {
-      await getIt.isReady<BeaconManager>();
-    } catch (e) {
-      print("NOT SETUP; SETUP AGAIN PLS");
-      print(e);
+    });
+
+    if (beaconsManager == null) {
+      return;
     }
-    print("still cont");
-    final beaconsManager = await getIt.getAsync<BeaconManager>();
+
     var lastnotif = DateTime.now();
 
     beaconsManager.beaconInformationStream.listen((beaconInfo) {
