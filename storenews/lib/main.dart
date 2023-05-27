@@ -66,9 +66,10 @@ class _StoreNewsAppState extends State<StoreNewsApp>
     beaconsManager.beaconInformationStream.listen((beaconInfo) {
       if (!_isInForeground) {
         _showNotification("Beacons DataReceived: $beaconInfo");
-      } else {
-        debugPrint("Beacons DataReceived: $beaconInfo");
       }
+
+      debugPrint("Beacons DataReceived: $beaconInfo");
+      print("TODO web request");
     }, onDone: () {
       debugPrint("DONE!!!!");
     }, onError: (error) {

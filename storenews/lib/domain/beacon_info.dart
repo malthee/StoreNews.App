@@ -2,9 +2,11 @@ import '../util/constants.dart';
 
 class BeaconInfo {
   final int major, minor;
+  final double distanceMeter;
 
-  // Last time news for this beacon was fetched
+  // Last time news for this beacon was fetched, TODO extract to logic
   DateTime? _lastNewsFetch;
+
 
   set lastNewsFetch(DateTime value) {
     _lastNewsFetch = value;
@@ -18,12 +20,19 @@ class BeaconInfo {
   BeaconInfo({
     required this.major,
     required this.minor,
+    required this.distanceMeter,
   });
 
   factory BeaconInfo.fromJson(Map<String, dynamic> json) {
     return BeaconInfo(
-      major: json['major'] as int,
-      minor: json['minor'] as int,
+      major: int.parse(json['major']),
+      minor: int.parse(json['minor']),
+      distanceMeter: double.parse(json['distance']),
     );
+  }
+
+  @override
+  String toString() {
+    return 'BeaconInfo{major: $major, minor: $minor, distanceMeter: $distanceMeter}';
   }
 }

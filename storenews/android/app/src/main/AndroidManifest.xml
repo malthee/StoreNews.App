@@ -2,16 +2,15 @@
     package="at.malthee.storenews">
 
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
-    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"  android:maxSdkVersion="30" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
     <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
    <application
         android:label="storenews"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:fullBackupOnly="false"
+        android:allowBackup="false"> <!-- TODO reanable after permissions testing -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
