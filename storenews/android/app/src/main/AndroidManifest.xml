@@ -6,7 +6,7 @@
 
     <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
    <application
-        android:label="storenews"
+        android:label="StoreNews"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:fullBackupOnly="false"

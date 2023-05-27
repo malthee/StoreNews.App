@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:storenews/beacon/beacon_manager.dart';
 import 'package:storenews/ui/pages/news_overview.dart';
 import 'package:storenews/util/constants.dart';
@@ -26,6 +27,7 @@ class StoreNewsApp extends StatefulWidget {
   State<StoreNewsApp> createState() => _StoreNewsAppState();
 }
 
+/// App entry state, manages foreground/background state and dark mode. Sets up scanning.
 class _StoreNewsAppState extends State<StoreNewsApp>
     with WidgetsBindingObserver {
   bool _darkModeEnabled = false;
@@ -38,10 +40,12 @@ class _StoreNewsAppState extends State<StoreNewsApp>
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
     // Only show notifications if the app is in the background.
     super.didChangeAppLifecycleState(state);
-    _isInForeground = state == AppLifecycleState.resumed;
+    setState(() {
+      _isInForeground = state == AppLifecycleState.resumed;
+    });
   }
 
   @override
@@ -57,11 +61,17 @@ class _StoreNewsAppState extends State<StoreNewsApp>
     initPlatformState();
   }
 
-
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
     print("haaaaoo");
-    await getIt.isReady<BeaconManager>();
+
+    try {
+      await getIt.isReady<BeaconManager>();
+    } catch (e) {
+      print("NOT SETUP; SETUP AGAIN PLS");
+      print(e);
+    }
+    print("still cont");
     final beaconsManager = await getIt.getAsync<BeaconManager>();
     var lastnotif = DateTime.now();
 
@@ -69,15 +79,16 @@ class _StoreNewsAppState extends State<StoreNewsApp>
       if (!_isInForeground) {
         // proof of concept fetch
         print("diff ${lastnotif.difference(DateTime.now()).inSeconds}");
-        if(lastnotif.difference(DateTime.now()).inSeconds < -10){
+        if (lastnotif.difference(DateTime.now()).inSeconds < -10) {
           print("shisss HAPPEN!!!");
           _showNotification("Beacons DataReceived: $beaconInfo");
-          http.get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1')).then((value) {
+          http
+              .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'))
+              .then((value) {
             _showNotification("YAY: $value");
             lastnotif = DateTime.now();
           });
         }
-
       }
 
       debugPrint("Beacons DataReceived: $beaconInfo");

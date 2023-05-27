@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:beacons_plugin/beacons_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:storenews/domain/beacon_info.dart';
 
 class BeaconManager extends Disposable {
@@ -43,17 +44,22 @@ class BeaconManager extends Disposable {
     // TODO REMOVE
     BeaconsPlugin.setDebugLevel(2);
 
+    await Permission.location.request();
+    if(!await Permission.locationAlways.request().isGranted) {
+      throw Exception("Location permission not granted");
+    }
+
     BeaconsPlugin.channel.setMethodCallHandler((call) async {
       debugPrint("!!!!Method: ${call.method}");
     });
 
     // TODO handle with other permissions thing, should not be shown, but call is required here
-    if (Platform.isAndroid) {
-      await BeaconsPlugin.setDisclosureDialogMessage(
-          title: "Background Locations",
-          message:
-              "[This app] collects location data to enable [feature], [feature], & [feature] even when the app is closed or not in use");
-    }
+    // if (Platform.isAndroid) {
+    //   await BeaconsPlugin.setDisclosureDialogMessage(
+    //       title: "Background Locations",
+    //       message:
+    //           "[This app] collects location data to enable [feature], [feature], & [feature] even when the app is closed or not in use");
+    // }
 
     await BeaconsPlugin.setForegroundServiceNotification("Store News Scan", "Store News is scanning for news.");
 
