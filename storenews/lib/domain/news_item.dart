@@ -3,7 +3,7 @@ class NewsItem {
   final int storeNumber;
   final int companyNumber;
   final String name;
-  final String markdownContent;
+  final String markupContent;
   final DateTime lastChanged;
   final DateTime? expires;
   final String? detailImageId;
@@ -13,7 +13,7 @@ class NewsItem {
   NewsItem({
     required this.id,
     required this.name,
-    required this.markdownContent,
+    required this.markupContent,
     required this.storeNumber,
     required this.companyNumber,
     required this.lastChanged,
@@ -28,7 +28,7 @@ class NewsItem {
     return NewsItem(
       id: json['id'] as String,
       name: json['name'] as String,
-      markdownContent: json['markdownContent'] as String,
+      markupContent: json['markupContent'] as String,
       storeNumber: json['storeNumber'] as int,
       companyNumber: json['companyNumber'] as int,
       lastChanged: DateTime.parse(json['lastChanged'] as String),
@@ -41,6 +41,6 @@ class NewsItem {
 
   @override
   String toString() {
-    return 'NewsItem{id: $id, storeNumber: $storeNumber, companyNumber: $companyNumber, name: $name, markdownContent: $markdownContent, lastChanged: $lastChanged, expires: $expires, detailImageId: $detailImageId, scannedAt: $scannedAt, read: $read}';
+    return 'NewsItem{id: $id, storeNumber: $storeNumber, companyNumber: $companyNumber, name: $name, markupContent: $markupContent, lastChanged: $lastChanged, expires: $expires, detailImageId: $detailImageId, scannedAt: $scannedAt, read: $read}';
   }
 }

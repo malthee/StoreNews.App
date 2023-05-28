@@ -180,7 +180,7 @@ class _DetailsText extends StatelessWidget {
           children: [
             Text('Details'.i18n,
                 style: Theme.of(context).textTheme.headlineMedium),
-            Text(newsItem.markdownContent),
+            Text(newsItem.markupContent),
           ],
         ),
       )),

@@ -5,14 +5,16 @@ import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:storenews/domain/news_item.dart';
 import 'package:storenews/manager/beacon_manager.dart';
+import 'package:storenews/service/news_service.dart';
 import 'package:storenews/util/constants.dart';
 import '../domain/beacon_info.dart';
 
 class NewsManager extends Disposable {
   static final logger = GetIt.I<Logger>();
   final BeaconManager _beaconManager;
+  final NewsService _newsService;
   final Map<BeaconInfo, DateTime> _lastNewsFetch = {};
-  final Set<String> _seenNews = {};
+  final Set<NewsItem> _seenNews = {}; // TODO allow merge with store newsitems
 
   final StreamController<NewsItem> _fetchedNewsStreamController =
       StreamController.broadcast();
@@ -23,12 +25,17 @@ class NewsManager extends Disposable {
   /// Stream of news items that have been fetched because the user was in the beacon range.
   Stream<NewsItem> get fetchedNewsStream => _fetchedNewsStreamController.stream;
 
+  Set<NewsItem> get seenNews => _seenNews;
+
   NewsManager(
-      {BeaconManager? beaconManager}) // Allow passing in a mock for testing.
-      : _beaconManager = beaconManager ?? GetIt.I<BeaconManager>() {
+      {BeaconManager? beaconManager,
+      NewsService? newsService}) // Allow passing in a mock for testing.
+      : _beaconManager = beaconManager ?? GetIt.I<BeaconManager>(),
+        _newsService = newsService ?? GetIt.I<NewsService>() {
     _beaconInformationSubscription = _listenToBeaconInfo();
   }
 
+  /// Starts the news fetching process. This will start the beacon manager and listen to beacon information.
   Future<bool> startNewsFetch() async {
     try {
       await _beaconManager.startScanning();
@@ -42,6 +49,7 @@ class NewsManager extends Disposable {
     }
   }
 
+  /// Stops the news fetching process. This will stop the beacon manager and stop listening to beacon information.
   Future<bool> stopNewsFetch() async {
     try {
       _beaconInformationSubscription.pause();
@@ -64,33 +72,26 @@ class NewsManager extends Disposable {
             currentTime.difference(lastFetched) > beaconNewsFetchInterval);
   }
 
+  /// Listens to the scanned beacons and fetches news for them. New news items are added to the [_fetchedNewsStreamController].
   StreamSubscription<BeaconInfo> _listenToBeaconInfo() {
     return _beaconManager.beaconInformationStream.listen((beaconInfo) async {
       if (_shouldFetchNewsForBeacon(beaconInfo)) {
         logger.i("Fetching news for beacon $beaconInfo");
-        NewsItem ni = NewsItem(
-            name: 'News Item 1',
-            markdownContent:
-                'News Item 1 content content content Description #HELLO and so on',
-            lastChanged: DateTime.now(),
-            companyNumber: 1,
-            storeNumber: 1,
-            id: '1')
-          ..scannedAt = DateTime.now();
-
+        // TODO prevent spam fetching
         _lastNewsFetch[beaconInfo] = DateTime.now();
+        final ni =
+            await _newsService.getLatestNews(beaconInfo.major, beaconInfo.minor)
+              ?..scannedAt = DateTime.now();
 
         // When news was fetched more than once, we don't want to show it again.
-        if (!_seenNews.contains(ni.id)) {
+        if (ni != null && !_seenNews.contains(ni)) {
           _fetchedNewsStreamController.add(ni);
-          _seenNews.add(ni.id);
+          _seenNews.add(ni);
+          logger.i("New news fetched for beacon $beaconInfo: $ni");
         } else {
-          logger.d("NewsItem fetched but already seen, not showing again: ${ni.id}");
+          logger.d("No new news found for beacon $beaconInfo");
         }
       }
-    }, onError: (e) {
-      // TODO;
-      logger.e("BeaconManager error: $e");
     });
   }
 

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 const appName = "Store News";
 // -- News fetching -- //
 // When news for the same store is fetched again
-const beaconNewsFetchInterval = Duration(seconds: 30);
+const beaconNewsFetchInterval = Duration(minutes: 30);
 const notificationCoolDown = Duration(minutes: 5);
 
 // -- Beacon Scanning -- //
@@ -13,7 +13,13 @@ const beaconRegionUUID = "acfd065e-c3c0-11e3-9bbe-1a514932ac01";
 const beaconRecognitionDistance = 3.0; // in meters
 
 // -- API Endpoints -- //
-const apiBaseUrl = "http://localhost:8080";
+const apiBaseUrl = "http://192.168.0.25:8080";
+const tokenEndpoint = "/auth/customertoken";
+String companyEndpoint(int id) => "/company/$id";
+String companyLogoEndpoint(int id) => "/company/$id/logoImage";
+String imageEndpoint(String id) => "/image/$id";
+String storeEndpoint(int companyId, int storeId) =>
+    "/store/$companyId/$storeId";
 
 // -- UI -- //
 class InsetSizes {

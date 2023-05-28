@@ -27,7 +27,7 @@ void showNewsNotification(FlutterLocalNotificationsPlugin notificationsPlugin,
     await notificationsPlugin.show(
         newsNotificationCount++,
         item.name,
-        item.markdownContent,
+        item.markupContent,
         platformChannelSpecifics,
         payload: item.id.toString());
   } else {

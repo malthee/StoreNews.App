@@ -66,7 +66,7 @@ class NewsItemList extends StatelessWidget {
                   leading: _StoreIconNavigator(newsItem: newsItem),
                   title: Text(newsItem.name,
                       maxLines: 1, overflow: TextOverflow.ellipsis),
-                  subtitle: Text(newsItem.markdownContent,
+                  subtitle: Text(newsItem.markupContent,
                       maxLines: 2, overflow: TextOverflow.ellipsis),
                   trailing: _SeenExpiresInfo(newsItem: newsItem),
                 ),

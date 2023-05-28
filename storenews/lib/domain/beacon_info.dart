@@ -1,5 +1,6 @@
 
 class BeaconInfo {
+  /// Major -> Company, Minor -> Store
   final int major, minor;
   final double distanceMeter;
 
