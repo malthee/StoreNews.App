@@ -19,7 +19,7 @@ void showNewsNotification(FlutterLocalNotificationsPlugin notificationsPlugin,
     "Where new News Items detected by StoreNews are shown",
     playSound: false,
     vibrationPattern:
-    Int64List.fromList([100, 10, 100, 10, 100]), // Funny feature
+        Int64List.fromList([100, 10, 100, 10, 100]), // Funny feature
   );
   var iOSPlatformChannelSpecifics = const IOSNotificationDetails();
   var platformChannelSpecifics = NotificationDetails(
@@ -32,9 +32,9 @@ void showNewsNotification(FlutterLocalNotificationsPlugin notificationsPlugin,
         item.markupContent, platformChannelSpecifics,
         payload: jsonEncode(item.toJson()));
   } else {
-    final names = newsItems.map((i) => i.name).join(', ');
-    await notificationsPlugin.show(newsNotificationCount++, names,
-        'You have ${newsItems.length} new News Items', platformChannelSpecifics,
+    final names = newsItems.map((i) => i.name).join('\n');
+    await notificationsPlugin.show(newsNotificationCount++,
+        '${newsItems.length} new News Items', names, platformChannelSpecifics,
         payload: jsonEncode(newsItems.first.toJson())); // Payload is first item
   }
 }
