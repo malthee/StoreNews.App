@@ -13,7 +13,7 @@ class StoreDetail extends StatelessWidget {
   final newsItems = <NewsItem>[
     NewsItem(
         name: 'News Item 1',
-        markdownContent: 'News Item 1 Description #HELLO and so on',
+        markupContent: 'News Item 1 Description #HELLO and so on',
         lastChanged: DateTime.now(),
         companyNumber: 1,
         storeNumber: 1,
@@ -21,7 +21,7 @@ class StoreDetail extends StatelessWidget {
       ..scannedAt = DateTime.now(),
     NewsItem(
         name: 'News Item 2aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-        markdownContent:
+        markupContent:
             'News Item 2 Description #HELLO and so onaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa and more more more',
         lastChanged: DateTime.now(),
         companyNumber: 1,
@@ -30,7 +30,7 @@ class StoreDetail extends StatelessWidget {
         expires: DateTime.now().subtract(const Duration(days: 1))),
     NewsItem(
         name: 'News Item 3',
-        markdownContent: 'News Item 3 Description #HELLO and so on',
+        markupContent: 'News Item 3 Description #HELLO and so on',
         lastChanged: DateTime.now(),
         companyNumber: 1,
         storeNumber: 1,
@@ -38,7 +38,7 @@ class StoreDetail extends StatelessWidget {
         expires: DateTime.now().add(const Duration(days: 1))),
     NewsItem(
         name: 'News Item 4',
-        markdownContent: 'News Item 4 Description #HELLO and so on',
+        markupContent: 'News Item 4 Description #HELLO and so on',
         lastChanged: DateTime.now(),
         companyNumber: 1,
         storeNumber: 1,

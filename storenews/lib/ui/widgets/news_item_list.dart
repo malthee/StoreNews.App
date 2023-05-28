@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:storenews/domain/news_item.dart';
+import 'package:storenews/ui/widgets/company_logo.dart';
 import 'package:storenews/ui/widgets/news_item_expires_icon.dart';
 import 'package:storenews/util/dynamic_datetime_format.dart';
 import 'package:storenews/util/navigation_helper.dart';
@@ -61,12 +62,12 @@ class NewsItemList extends StatelessWidget {
                       right: InsetSizes.small,
                       top: InsetSizes.medium,
                       bottom: InsetSizes.medium),
-                  horizontalTitleGap: 4.0,
+                  horizontalTitleGap: InsetSizes.small,
                   titleAlignment: ListTileTitleAlignment.center,
                   leading: _StoreIconNavigator(newsItem: newsItem),
                   title: Text(newsItem.name,
                       maxLines: 1, overflow: TextOverflow.ellipsis),
-                  subtitle: Text(newsItem.markdownContent,
+                  subtitle: Text(newsItem.markupContent,
                       maxLines: 2, overflow: TextOverflow.ellipsis),
                   trailing: _SeenExpiresInfo(newsItem: newsItem),
                 ),
@@ -105,19 +106,18 @@ class _StoreIconNavigator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO icon from company, may own component with store_icon_name
     return IconButton(
-      onPressed: () => _storeIconTapped(
+      onPressed: () => _companyLogoTapped(
           context, newsItem.companyNumber, newsItem.storeNumber),
       icon: Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(BorderSizes.circularRadius),
               color: Theme.of(context).colorScheme.surface),
-          child: const Icon(Icons.more_horiz_rounded)),
+          child: CompanyLogo(companyNumber: newsItem.companyNumber)),
     );
   }
 
-  void _storeIconTapped(
+  void _companyLogoTapped(
           BuildContext context, int companyNumber, int storeNumber) =>
       navigateToStore(context, companyNumber, storeNumber);
 }
@@ -159,28 +159,31 @@ class _NewsNotFound extends StatelessWidget {
 
     return Container(
       alignment: Alignment.center,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.article_outlined,
-            size: 80,
-            color: theme.disabledColor,
-          ),
-          const SizedBox(height: 16.0),
-          Text(
-            "No news items available".i18n,
-            style: theme.textTheme.headlineSmall,
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 8.0),
-          Text(
-            "Visit some locations and make sure scanning is enabled.".i18n,
-            style: theme.textTheme.bodyMedium!
-                .merge(TextStyle(color: theme.disabledColor)),
-            textAlign: TextAlign.center,
-          ),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(InsetSizes.medium),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.article_outlined,
+              size: 80,
+              color: theme.disabledColor,
+            ),
+            const SizedBox(height: 16.0),
+            Text(
+              "No news items available".i18n,
+              style: theme.textTheme.headlineSmall,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8.0),
+            Text(
+              "Visit some locations and make sure scanning is enabled.".i18n,
+              style: theme.textTheme.bodyMedium!
+                  .merge(TextStyle(color: theme.disabledColor)),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
       ),
     );
   }

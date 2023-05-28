@@ -3,7 +3,7 @@ class NewsItem {
   final int storeNumber;
   final int companyNumber;
   final String name;
-  final String markdownContent;
+  final String markupContent;
   final DateTime lastChanged;
   final DateTime? expires;
   final String? detailImageId;
@@ -13,7 +13,7 @@ class NewsItem {
   NewsItem({
     required this.id,
     required this.name,
-    required this.markdownContent,
+    required this.markupContent,
     required this.storeNumber,
     required this.companyNumber,
     required this.lastChanged,
@@ -26,16 +26,32 @@ class NewsItem {
 
   factory NewsItem.fromJson(Map<String, dynamic> json) {
     return NewsItem(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      markdownContent: json['markdownContent'] as String,
-      storeNumber: json['storeNumber'] as int,
-      companyNumber: json['companyNumber'] as int,
-      lastChanged: DateTime.parse(json['lastChanged'] as String),
-      expires: json['expires'] == null
-          ? null
-          : DateTime.parse(json['expires'] as String),
-      detailImageId: json['detailImageId'] as String?,
+      id: json['id'],
+      name: json['name'],
+      markupContent: json['markupContent'],
+      storeNumber: json['storeNumber'],
+      companyNumber: json['companyNumber'],
+      lastChanged: DateTime.parse(json['lastChanged']),
+      expires: json['expires'] == null ? null : DateTime.parse(json['expires']),
+      detailImageId: json['detailImageId'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'markupContent': markupContent,
+      'storeNumber': storeNumber,
+      'companyNumber': companyNumber,
+      'lastChanged': lastChanged.toIso8601String(),
+      'expires': expires?.toIso8601String(),
+      'detailImageId': detailImageId,
+    };
+  }
+
+  @override
+  String toString() {
+    return 'NewsItem{id: $id, storeNumber: $storeNumber, companyNumber: $companyNumber, name: $name, markupContent: $markupContent, lastChanged: $lastChanged, expires: $expires, detailImageId: $detailImageId, scannedAt: $scannedAt, read: $read}';
   }
 }

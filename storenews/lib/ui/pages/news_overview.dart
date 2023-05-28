@@ -1,76 +1,126 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:get_it_mixin/get_it_mixin.dart';
 
 import 'package:storenews/domain/news_item.dart';
-import 'package:storenews/ui/widgets/bt_settings_button.dart';
+import 'package:storenews/ui/widgets/news_scan_settings_button.dart';
 import 'package:storenews/ui/widgets/news_item_list.dart';
+import 'package:storenews/ui/widgets/permissions_missing_dialog.dart';
 import 'package:storenews/util/constants.dart';
 import '../../i18n/news_overview.i18n.dart';
+import '../../manager/news_manager.dart';
 
-class NewsOverview extends StatelessWidget {
+class NewsOverview extends StatefulWidget with GetItStatefulWidgetMixin {
   final Function(bool) onDarkModeToggle;
 
   NewsOverview({super.key, required this.onDarkModeToggle});
 
-  final newsItems = <NewsItem>[
-    NewsItem(
-        name: 'News Item 1',
-        markdownContent: 'News Item 1 Description #HELLO and so on',
-        lastChanged: DateTime.now(),
-        companyNumber: 1,
-        storeNumber: 1,
-        id: '1')
-      ..scannedAt = DateTime.now(),
-    NewsItem(
-        name: 'News Item 2aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-        markdownContent:
-            'News Item 2 Description #HELLO and so onaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa and more more more',
-        lastChanged: DateTime.now(),
-        companyNumber: 1,
-        storeNumber: 1,
-        id: '2',
-        expires: DateTime.now().subtract(const Duration(days: 1)))
-      ..scannedAt = DateTime.now().subtract(const Duration(minutes: 2)),
-    NewsItem(
-        name: 'News Item 3',
-        markdownContent: 'News Item 3 Description #HELLO and so on',
-        lastChanged: DateTime.now(),
-        companyNumber: 1,
-        storeNumber: 1,
-        id: '3',
-        expires: DateTime.now().add(const Duration(days: 1)))
-      ..scannedAt = DateTime.now().subtract(const Duration(minutes: 20)),
-    NewsItem(
-        name: 'News Item 4',
-        markdownContent: 'News Item 4 Description #HELLO and so on',
-        lastChanged: DateTime.now(),
-        companyNumber: 1,
-        storeNumber: 1,
-        id: '4',
-        expires: DateTime.now().add(const Duration(days: 1)))
-      ..scannedAt = DateTime.now().subtract(const Duration(hours: 4)),
-    NewsItem(
-        name: 'News Item 5',
-        markdownContent: 'News Item 5 Description #HELLO and so on',
-        lastChanged: DateTime.now(),
-        companyNumber: 1,
-        storeNumber: 1,
-        id: '5',
-        expires: DateTime.now().add(const Duration(days: 1)))
-      ..scannedAt = DateTime.now().subtract(const Duration(hours: 6)),
-    NewsItem(
-        name: 'News Item 6',
-        markdownContent: 'News Item 6 Description #HELLO and so on',
-        lastChanged: DateTime.now(),
-        companyNumber: 1,
-        storeNumber: 1,
-        id: '6',
-        expires: DateTime.now().add(const Duration(days: 1)))
-      ..scannedAt = DateTime.now().subtract(const Duration(days: 4)),
-  ];
+  @override
+  State<NewsOverview> createState() => _NewsOverviewState();
+}
+
+class _NewsOverviewState extends State<NewsOverview> with GetItStateMixin {
+  // final newsItems = <NewsItem>[
+  //   NewsItem(
+  //       name: 'News Item 1',
+  //       markdownContent: 'News Item 1 Description #HELLO and so on',
+  //       lastChanged: DateTime.now(),
+  //       companyNumber: 1,
+  //       storeNumber: 1,
+  //       id: '1')
+  //     ..scannedAt = DateTime.now(),
+  //   NewsItem(
+  //       name: 'News Item 2aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+  //       markdownContent:
+  //           'News Item 2 Description #HELLO and so onaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa and more more more',
+  //       lastChanged: DateTime.now(),
+  //       companyNumber: 1,
+  //       storeNumber: 1,
+  //       id: '2',
+  //       expires: DateTime.now().subtract(const Duration(days: 1)))
+  //     ..scannedAt = DateTime.now().subtract(const Duration(minutes: 2)),
+  //   NewsItem(
+  //       name: 'News Item 3',
+  //       markdownContent: 'News Item 3 Description #HELLO and so on',
+  //       lastChanged: DateTime.now(),
+  //       companyNumber: 1,
+  //       storeNumber: 1,
+  //       id: '3',
+  //       expires: DateTime.now().add(const Duration(days: 1)))
+  //     ..scannedAt = DateTime.now().subtract(const Duration(minutes: 20)),
+  //   NewsItem(
+  //       name: 'News Item 4',
+  //       markdownContent: 'News Item 4 Description #HELLO and so on',
+  //       lastChanged: DateTime.now(),
+  //       companyNumber: 1,
+  //       storeNumber: 1,
+  //       id: '4',
+  //       expires: DateTime.now().add(const Duration(days: 1)))
+  //     ..scannedAt = DateTime.now().subtract(const Duration(hours: 4)),
+  //   NewsItem(
+  //       name: 'News Item 5',
+  //       markdownContent: 'News Item 5 Description #HELLO and so on',
+  //       lastChanged: DateTime.now(),
+  //       companyNumber: 1,
+  //       storeNumber: 1,
+  //       id: '5',
+  //       expires: DateTime.now().add(const Duration(days: 1)))
+  //     ..scannedAt = DateTime.now().subtract(const Duration(hours: 6)),
+  //   NewsItem(
+  //       name: 'News Item 6',
+  //       markdownContent: 'News Item 6 Description #HELLO and so on',
+  //       lastChanged: DateTime.now(),
+  //       companyNumber: 1,
+  //       storeNumber: 1,
+  //       id: '6',
+  //       expires: DateTime.now().add(const Duration(days: 1)))
+  //     ..scannedAt = DateTime.now().subtract(const Duration(days: 4)),
+  // ];
+  final newsManager = GetIt.I<NewsManager>();
+  final newsItems = <NewsItem>[];
+  late final StreamSubscription<NewsItem> _newsItemSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    // Show dialog if setup failed
+    initPlatformState().then((value) => {
+          if (!value)
+            showDialog(
+                context: context,
+                builder: (context) => const PermissionsMissingDialog())
+        });
+
+    _newsItemSubscription = _listenToNewsItems();
+  }
+
+  StreamSubscription<NewsItem> _listenToNewsItems() {
+    return newsManager.fetchedNewsStream.listen((newsItem) {
+      setState(() {
+        newsItems.insert(0, newsItem);
+      });
+    }, onError: (e) {
+      // TODO handle errors
+    });
+  }
+
+  Future<bool> initPlatformState() async {
+    // Try setup and start the news fetch
+    return await newsManager.startNewsFetch();
+  }
+
+  @override
+  void dispose() {
+    _newsItemSubscription.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final darkModeEnabled = Theme.of(context).brightness == Brightness.dark;
+    final scanRunning = watchX((NewsManager n) => n.isRunning);
 
     return Scaffold(
         appBar: AppBar(
@@ -79,22 +129,20 @@ class NewsOverview extends StatelessWidget {
             child: Image(image: AssetImage('assets/icon/storenews.png')),
           ),
           title: const Text('Store News'),
-          // TODO scan toggle
           actions: [
             IconButton(
-                onPressed: () => onDarkModeToggle(!darkModeEnabled),
+                onPressed: () => widget.onDarkModeToggle(!darkModeEnabled),
                 icon: Visibility(
                   visible: darkModeEnabled,
                   replacement: const Icon(Icons.dark_mode),
                   child: const Icon(Icons.light_mode),
                 )),
-            BtSettingsButton(isScanning: true, onScanToggle: () {})
+            NewsScanSettingsButton()
           ],
         ),
         body: Column(
           children: [
-            // TODO also show latest images
-            _ScanNotRunning(isScanning: true), // TODO connect state
+            _ScanNotRunning(isScanning: scanRunning),
             Expanded(
                 child: NewsItemList(newsItems: newsItems, showTimeAgo: true)),
           ],

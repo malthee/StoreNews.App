@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:i18n_extension/default.i18n.dart';
+import 'package:storenews/ui/widgets/company_logo.dart';
+
+import '../../service/company_service.dart';
 
 class StoreIconName extends StatelessWidget {
   final int companyNumber, storeNumber;
@@ -12,17 +17,28 @@ class StoreIconName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final companyService = GetIt.I<CompanyService>();
+    final companyFuture = companyService.get(companyNumber);
 
     return Row(
       children: [
-        // TODO load ico from company
-        const Icon(Icons.business_center),
+        CompanyLogo(companyNumber: companyNumber),
         const SizedBox(width: 10),
         Expanded(
-            // TODO Company name + store name
-            child: Text('Billa - Hagenberg',
-                overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.titleMedium)),
+            child: FutureBuilder(
+                future: companyFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData && snapshot.data != null) {
+                    final company = snapshot.data!;
+                    return Text('${company.name} - TODO store name', // TODO
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.titleMedium);
+                  } else if (!snapshot.hasError) {
+                    return const LinearProgressIndicator();
+                  }
+
+                  return Text('Store not found'.i18n); // Fallback
+                })),
       ],
     );
   }
