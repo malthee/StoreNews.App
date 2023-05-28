@@ -149,9 +149,14 @@ class _DetailTitle extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Expanded(
-            child: Text(newsItem.name,
-                style: Theme.of(context).textTheme.headlineMedium,
-                overflow: TextOverflow.ellipsis),
+            child: Scrollbar(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Text(newsItem.name,
+                    style: Theme.of(context).textTheme.headlineSmall,
+                    overflow: TextOverflow.visible),
+              ),
+            ),
           ),
           NewsItemExpiredIcon(newsItem: newsItem)
         ],

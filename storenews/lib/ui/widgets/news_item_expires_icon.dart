@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:storenews/util/constants.dart';
 import '../../domain/news_item.dart';
 import '../../util/dynamic_datetime_format.dart';
 import '../../i18n/news_item_expires.i18n.dart';
