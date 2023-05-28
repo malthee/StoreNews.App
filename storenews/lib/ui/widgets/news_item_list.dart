@@ -61,7 +61,7 @@ class NewsItemList extends StatelessWidget {
                       right: InsetSizes.small,
                       top: InsetSizes.medium,
                       bottom: InsetSizes.medium),
-                  horizontalTitleGap: 4.0,
+                  horizontalTitleGap: InsetSizes.small,
                   titleAlignment: ListTileTitleAlignment.center,
                   leading: _StoreIconNavigator(newsItem: newsItem),
                   title: Text(newsItem.name,

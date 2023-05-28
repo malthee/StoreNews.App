@@ -99,7 +99,7 @@ class _NewsOverviewState extends State<NewsOverview> with GetItStateMixin {
   StreamSubscription<NewsItem> _listenToNewsItems() {
     return newsManager.fetchedNewsStream.listen((newsItem) {
       setState(() {
-        newsItems.add(newsItem);
+        newsItems.insert(0, newsItem);
       });
     }, onError: (e) {
       // TODO handle errors

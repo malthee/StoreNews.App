@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 const appName = "Store News";
 // -- News fetching -- //
 // When news for the same store is fetched again
-const beaconNewsFetchInterval = Duration(minutes: 30);
+const beaconNewsFetchInterval = Duration(seconds: 30);
 const notificationCoolDown = Duration(minutes: 5);
 
 // -- Beacon Scanning -- //
-const enableBeaconPluginDebug = true;
+const enableBeaconPluginDebug = false;
 const beaconRegionName = "StoreNewsBeacons";
 const beaconRegionUUID = "acfd065e-c3c0-11e3-9bbe-1a514932ac01";
 const beaconRecognitionDistance = 3.0; // in meters

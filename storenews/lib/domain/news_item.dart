@@ -38,4 +38,9 @@ class NewsItem {
       detailImageId: json['detailImageId'] as String?,
     );
   }
+
+  @override
+  String toString() {
+    return 'NewsItem{id: $id, storeNumber: $storeNumber, companyNumber: $companyNumber, name: $name, markdownContent: $markdownContent, lastChanged: $lastChanged, expires: $expires, detailImageId: $detailImageId, scannedAt: $scannedAt, read: $read}';
+  }
 }

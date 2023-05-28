@@ -12,14 +12,13 @@ class NewsManager extends Disposable {
   static final logger = GetIt.I<Logger>();
   final BeaconManager _beaconManager;
   final Map<BeaconInfo, DateTime> _lastNewsFetch = {};
-  final List<NewsItem> _cachedNews = []; // TODO
+  final Set<String> _seenNews = {};
+
   final StreamController<NewsItem> _fetchedNewsStreamController =
       StreamController.broadcast();
   late final StreamSubscription<BeaconInfo> _beaconInformationSubscription;
 
   final isRunning = ValueNotifier(false);
-
-  List<NewsItem> get cachedNews => _cachedNews;
 
   /// Stream of news items that have been fetched because the user was in the beacon range.
   Stream<NewsItem> get fetchedNewsStream => _fetchedNewsStreamController.stream;
@@ -69,18 +68,25 @@ class NewsManager extends Disposable {
     return _beaconManager.beaconInformationStream.listen((beaconInfo) async {
       if (_shouldFetchNewsForBeacon(beaconInfo)) {
         logger.i("Fetching news for beacon $beaconInfo");
-        if (beaconInfo.major == 1) {
-          _fetchedNewsStreamController.add(NewsItem(
-              name: 'News Item 1',
-              markdownContent: 'News Item 1 Description #HELLO and so on',
-              lastChanged: DateTime.now(),
-              companyNumber: 1,
-              storeNumber: 1,
-              id: '1')
-            ..scannedAt = DateTime.now());
-        }
+        NewsItem ni = NewsItem(
+            name: 'News Item 1',
+            markdownContent:
+                'News Item 1 content content content Description #HELLO and so on',
+            lastChanged: DateTime.now(),
+            companyNumber: 1,
+            storeNumber: 1,
+            id: '1')
+          ..scannedAt = DateTime.now();
 
         _lastNewsFetch[beaconInfo] = DateTime.now();
+
+        // When news was fetched more than once, we don't want to show it again.
+        if (!_seenNews.contains(ni.id)) {
+          _fetchedNewsStreamController.add(ni);
+          _seenNews.add(ni.id);
+        } else {
+          logger.d("NewsItem fetched but already seen, not showing again: ${ni.id}");
+        }
       }
     }, onError: (e) {
       // TODO;
