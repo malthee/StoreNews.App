@@ -26,16 +26,14 @@ class NewsItem {
 
   factory NewsItem.fromJson(Map<String, dynamic> json) {
     return NewsItem(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      markupContent: json['markupContent'] as String,
-      storeNumber: json['storeNumber'] as int,
-      companyNumber: json['companyNumber'] as int,
-      lastChanged: DateTime.parse(json['lastChanged'] as String),
-      expires: json['expires'] == null
-          ? null
-          : DateTime.parse(json['expires'] as String),
-      detailImageId: json['detailImageId'] as String?,
+      id: json['id'],
+      name: json['name'],
+      markupContent: json['markupContent'],
+      storeNumber: json['storeNumber'],
+      companyNumber: json['companyNumber'],
+      lastChanged: DateTime.parse(json['lastChanged']),
+      expires: json['expires'] == null ? null : DateTime.parse(json['expires']),
+      detailImageId: json['detailImageId'],
     );
   }
 

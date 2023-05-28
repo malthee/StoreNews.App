@@ -15,9 +15,6 @@ const beaconRecognitionDistance = 3.0; // in meters
 // -- API Endpoints -- //
 const apiBaseUrl = "http://192.168.0.25:8080";
 const tokenEndpoint = "/auth/customertoken";
-String companyEndpoint(int id) => "/company/$id";
-String companyLogoEndpoint(int id) => "/company/$id/logoImage";
-String imageEndpoint(String id) => "/image/$id";
 String storeEndpoint(int companyId, int storeId) =>
     "/store/$companyId/$storeId";
 

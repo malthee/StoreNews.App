@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:storenews/domain/news_item.dart';
+import 'package:storenews/ui/widgets/company_logo.dart';
 import 'package:storenews/ui/widgets/news_item_expires_icon.dart';
 import 'package:storenews/util/dynamic_datetime_format.dart';
 import 'package:storenews/util/navigation_helper.dart';
@@ -105,19 +106,18 @@ class _StoreIconNavigator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO icon from company, may own component with store_icon_name
     return IconButton(
-      onPressed: () => _storeIconTapped(
+      onPressed: () => _companyLogoTapped(
           context, newsItem.companyNumber, newsItem.storeNumber),
       icon: Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(BorderSizes.circularRadius),
               color: Theme.of(context).colorScheme.surface),
-          child: const Icon(Icons.more_horiz_rounded)),
+          child: CompanyLogo(companyNumber: newsItem.companyNumber)),
     );
   }
 
-  void _storeIconTapped(
+  void _companyLogoTapped(
           BuildContext context, int companyNumber, int storeNumber) =>
       navigateToStore(context, companyNumber, storeNumber);
 }

@@ -10,11 +10,11 @@ class BeaconInfo {
     required this.distanceMeter,
   });
 
-  factory BeaconInfo.fromJson(Map<String, dynamic> json) {
+  factory BeaconInfo.fromBeaconEvent(Map<String, dynamic> event) {
     return BeaconInfo(
-      major: int.parse(json['major']),
-      minor: int.parse(json['minor']),
-      distanceMeter: double.parse(json['distance']),
+      major: int.parse(event['major']),
+      minor: int.parse(event['minor']),
+      distanceMeter: double.parse(event['distance']),
     );
   }
 

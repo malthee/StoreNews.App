@@ -75,7 +75,7 @@ class BeaconManager extends Disposable {
           final decoded = jsonDecode(data);
           // Only add beacons with the correct region.
           if (decoded["name"] == beaconRegionName) {
-            _beaconInformationController.add(BeaconInfo.fromJson(decoded));
+            _beaconInformationController.add(BeaconInfo.fromBeaconEvent(decoded));
           }
         }
       } catch (e) {

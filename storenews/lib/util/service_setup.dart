@@ -9,6 +9,7 @@ import 'package:storenews/manager/news_manager.dart';
 import 'package:storenews/manager/news_notification_manager.dart';
 import 'package:http/http.dart' as http;
 import 'package:storenews/service/authorized_client.dart';
+import 'package:storenews/service/company_service.dart';
 import 'package:storenews/service/image_service.dart';
 import 'package:storenews/service/news_service.dart';
 import 'package:storenews/util/navigation_helper.dart';
@@ -30,6 +31,7 @@ void registerServices(GetIt getIt) {
   // -- Services -- //
   getIt.registerLazySingleton<NewsService>(() => NewsService());
   getIt.registerLazySingleton<ImageService>(() => ImageService());
+  getIt.registerLazySingleton<CompanyService>(() => CompanyService());
 }
 
 // Notifications Plugin needs context to navigate.
