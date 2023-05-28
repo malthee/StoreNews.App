@@ -1,21 +1,31 @@
+import 'package:storenews/manager/news_manager.dart';
+import 'package:get_it/get_it.dart';
+import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:flutter/material.dart';
 import '../../i18n/news_scan_settings_button.i18n.dart';
 
-class NewsScanSettingsButton extends StatelessWidget {
-  final bool isScanning;
-  final Function onScanToggle;
+class NewsScanSettingsButton extends StatelessWidget with GetItMixin {
+  final newsManager = GetIt.I<NewsManager>();
 
-  const NewsScanSettingsButton({super.key, required this.isScanning, required this.onScanToggle});
+  NewsScanSettingsButton({super.key});
+
+  void onScanToggle(bool enabled) async {
+    if (!enabled) {
+      await newsManager.stopNewsFetch();
+    } else {
+      await newsManager.startNewsFetch();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    bool scanRunning = watchX((NewsManager n) => n.isRunning);
+
     return PopupMenuButton(
-        onSelected: (scanEnabled) {
-          onScanToggle();
-        },
+        onSelected: onScanToggle,
         tooltip: 'News Scan Settings'.i18n,
         itemBuilder: (context) => <PopupMenuEntry<bool>>[
-              if (!isScanning)
+              if (!scanRunning)
                 PopupMenuItem<bool>(
                   value: true,
                   child: Row(

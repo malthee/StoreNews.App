@@ -1,4 +1,3 @@
-import '../util/constants.dart';
 
 class BeaconInfo {
   final int major, minor;

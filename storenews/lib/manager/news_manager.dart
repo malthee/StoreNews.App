@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:storenews/domain/news_item.dart';
@@ -15,6 +16,8 @@ class NewsManager extends Disposable {
       StreamController.broadcast();
   late final StreamSubscription<BeaconInfo> _beaconInformationSubscription;
 
+  final isRunning = ValueNotifier(false);
+
   /// Stream of news items that have been fetched because the user was in the beacon range.
   get fetchedNewsStream => _fetchedNewsStreamController.stream;
 
@@ -24,20 +27,11 @@ class NewsManager extends Disposable {
     _beaconInformationSubscription = _listenToBeaconInfo();
   }
 
-  Future<bool> init() async {
-    try {
-      await _beaconManager.init();
-      return true;
-    } catch (e) {
-      logger.e("BeaconManager init failed: $e");
-      return false;
-    }
-  }
-
   Future<bool> startNewsFetch() async {
     try {
       await _beaconManager.startScanning();
       _beaconInformationSubscription.resume();
+      isRunning.value = true;
       logger.d("News fetch started.");
       return true;
     } catch (e) {
@@ -50,6 +44,7 @@ class NewsManager extends Disposable {
     try {
       _beaconInformationSubscription.pause();
       await _beaconManager.stopScanning();
+      isRunning.value = false;
       logger.d("News fetch stopped.");
       return true;
     } catch (e) {
@@ -58,7 +53,7 @@ class NewsManager extends Disposable {
     }
   }
 
-  bool shouldFetchNewsForBeacon(BeaconInfo bi) {
+  bool _shouldFetchNewsForBeacon(BeaconInfo bi) {
     final currentTime = DateTime.now();
     final lastFetched = _lastNewsFetch[bi];
     // Never fetched news for this beacon, or last fetch was more than configured time ago.
@@ -68,12 +63,15 @@ class NewsManager extends Disposable {
 
   StreamSubscription<BeaconInfo> _listenToBeaconInfo() {
     return _beaconManager.beaconInformationStream.listen((beaconInfo) async {
-      if (shouldFetchNewsForBeacon(beaconInfo)) {
+      if (_shouldFetchNewsForBeacon(beaconInfo)) {
         logger.i("Fetching news for beacon $beaconInfo");
         // TODO FETCH
 
         _lastNewsFetch[beaconInfo] = DateTime.now();
       }
+    }, onError: (e) {
+      // TODO;
+      logger.e("BeaconManager error: $e");
     });
   }
 

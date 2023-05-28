@@ -95,11 +95,6 @@ class _NewsOverviewState extends State<NewsOverview> {
 
   Future<bool> initPlatformState() async {
     // Try setup and start the news fetch
-    final initSuccess = await newsManager.init();
-    if (!initSuccess) {
-      return false;
-    }
-
     return await newsManager.startNewsFetch();
   }
 
@@ -114,7 +109,6 @@ class _NewsOverviewState extends State<NewsOverview> {
             child: Image(image: AssetImage('assets/icon/storenews.png')),
           ),
           title: const Text('Store News'),
-          // TODO scan toggle
           actions: [
             IconButton(
                 onPressed: () => widget.onDarkModeToggle(!darkModeEnabled),
@@ -123,13 +117,12 @@ class _NewsOverviewState extends State<NewsOverview> {
                   replacement: const Icon(Icons.dark_mode),
                   child: const Icon(Icons.light_mode),
                 )),
-            NewsScanSettingsButton(isScanning: true, onScanToggle: () {})
+            NewsScanSettingsButton()
           ],
         ),
         body: Column(
           children: [
-            // TODO also show latest images
-            _ScanNotRunning(isScanning: true), // TODO connect state
+            _ScanNotRunning(isScanning: _scanRunning),
             Expanded(
                 child: NewsItemList(newsItems: newsItems, showTimeAgo: true)),
           ],

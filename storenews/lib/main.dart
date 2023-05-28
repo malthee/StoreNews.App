@@ -1,20 +1,12 @@
-import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:storenews/manager/beacon_manager.dart';
 import 'package:storenews/manager/news_notification_manager.dart';
 import 'package:storenews/ui/pages/news_overview.dart';
 import 'package:storenews/util/constants.dart';
-import 'package:storenews/util/navigation_helper.dart';
 import 'package:storenews/util/service_setup.dart';
-import 'package:http/http.dart' as http;
 
-import 'manager/news_manager.dart';
 
 final getIt = GetIt.instance;
 

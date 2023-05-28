@@ -21,15 +21,30 @@ class BeaconManager extends Disposable {
       StreamController<String>.broadcast();
 
   final ValueNotifier<bool> isScanning = ValueNotifier(false);
-  final ValueNotifier<bool> isSetup = ValueNotifier(false);
 
   /// Stream of [BeaconInfo]s that have been detected.
   Stream<BeaconInfo> get beaconInformationStream =>
       _beaconInformationController.stream;
 
-  /// Requests permissions, initializes the BeaconsPlugin and sets up the beacon scanning parameters. Sets [isSetup] to true when successful.
+  /// Starts scanning for beacons.
   /// Throws a [TimeoutException] if the plugin setup takes longer than [setupTimeOut] (may be caused by missing permissions).
-  Future init() async {
+  Future startScanning() async {
+    await _init();
+    await BeaconsPlugin.startMonitoring().timeout(setupTimeOut);
+    isScanning.value = true;
+    logger.d("BeaconManager started scanning.");
+  }
+
+  /// Stops scanning for beacons.
+  Future stopScanning() async {
+    await BeaconsPlugin.stopMonitoring();
+    isScanning.value = false;
+    logger.d("BeaconManager stopped scanning.");
+  }
+
+  /// Requests permissions, initializes the BeaconsPlugin and sets up the beacon scanning parameters.
+  /// Throws a [TimeoutException] if the plugin setup takes longer than [setupTimeOut] (may be caused by missing permissions).
+  Future _init() async {
     if (enableBeaconPluginDebug) BeaconsPlugin.setDebugLevel(2);
 
     await Permission.location.request();
@@ -50,27 +65,7 @@ class BeaconManager extends Disposable {
     await BeaconsPlugin.runInBackground(true).timeout(setupTimeOut);
     BeaconsPlugin.listenToBeacons(_beaconEventsController);
     _listenToBeaconEvents();
-
-    isSetup.value = true;
     logger.d("BeaconManager setup complete.");
-  }
-
-  /// Starts scanning for beacons.
-  /// Throws an [Exception] if [init] has not been called before.
-  /// Throws a [TimeoutException] if the plugin setup takes longer than [setupTimeOut] (may be caused by missing permissions).
-  Future startScanning() async {
-    if(!isSetup.value) throw Exception("BeaconManager not setup.");
-
-    await BeaconsPlugin.startMonitoring().timeout(setupTimeOut);
-    isScanning.value = true;
-    logger.d("BeaconManager started scanning.");
-  }
-
-  /// Stops scanning for beacons.
-  Future stopScanning() async {
-    await BeaconsPlugin.stopMonitoring();
-    isScanning.value = false;
-    logger.d("BeaconManager stopped scanning.");
   }
 
   void _listenToBeaconEvents() async {
