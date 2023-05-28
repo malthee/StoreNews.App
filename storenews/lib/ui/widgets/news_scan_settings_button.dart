@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import '../../i18n/bt_settings.i18n.dart';
+import '../../i18n/news_scan_settings_button.i18n.dart';
 
-class BtSettingsButton extends StatelessWidget {
+class NewsScanSettingsButton extends StatelessWidget {
   final bool isScanning;
   final Function onScanToggle;
 
-  const BtSettingsButton({super.key, required this.isScanning, required this.onScanToggle});
+  const NewsScanSettingsButton({super.key, required this.isScanning, required this.onScanToggle});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class BtSettingsButton extends StatelessWidget {
         onSelected: (scanEnabled) {
           onScanToggle();
         },
-        tooltip: 'Bluetooth Scan Settings'.i18n,
+        tooltip: 'News Scan Settings'.i18n,
         itemBuilder: (context) => <PopupMenuEntry<bool>>[
               if (!isScanning)
                 PopupMenuItem<bool>(

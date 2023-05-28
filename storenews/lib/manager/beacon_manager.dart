@@ -1,0 +1,97 @@
+import 'dart:async';
+import 'dart:convert';
+import 'package:beacons_plugin/beacons_plugin.dart';
+import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:logger/logger.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:storenews/domain/beacon_info.dart';
+import 'package:storenews/i18n/beacon_manager.i18n.dart';
+import 'package:storenews/util/constants.dart';
+
+class BeaconManager extends Disposable {
+  static const setupTimeOut = Duration(
+      seconds: 10); // Otherwise BeaconPlugin methods may block forever.
+
+  static final logger = GetIt.I<Logger>();
+
+  final StreamController<BeaconInfo> _beaconInformationController =
+      StreamController<BeaconInfo>.broadcast();
+  final StreamController<String> _beaconEventsController =
+      StreamController<String>.broadcast();
+
+  final ValueNotifier<bool> isScanning = ValueNotifier(false);
+  final ValueNotifier<bool> isSetup = ValueNotifier(false);
+
+  /// Stream of [BeaconInfo]s that have been detected.
+  Stream<BeaconInfo> get beaconInformationStream =>
+      _beaconInformationController.stream;
+
+  /// Requests permissions, initializes the BeaconsPlugin and sets up the beacon scanning parameters. Sets [isSetup] to true when successful.
+  /// Throws a [TimeoutException] if the plugin setup takes longer than [setupTimeOut] (may be caused by missing permissions).
+  Future init() async {
+    if (enableBeaconPluginDebug) BeaconsPlugin.setDebugLevel(2);
+
+    await Permission.location.request();
+    if (!await Permission.locationAlways.request().isGranted) {
+      throw Exception("Location permission not granted");
+    }
+
+    await BeaconsPlugin.setForegroundServiceNotification(
+        "Store News Scan".i18n, "Store News is scanning for news.".i18n);
+
+    await BeaconsPlugin.addRegion(beaconRegionName, beaconRegionUUID)
+        .timeout(setupTimeOut);
+
+    // TODO values from config
+    //BeaconsPlugin.setForegroundScanPeriodForAndroid(foregroundScanPeriod: 2200, foregroundBetweenScanPeriod: 10);
+    //BeaconsPlugin.setBackgroundScanPeriodForAndroid(backgroundScanPeriod: 2200, backgroundBetweenScanPeriod: 10);
+
+    await BeaconsPlugin.runInBackground(true).timeout(setupTimeOut);
+    BeaconsPlugin.listenToBeacons(_beaconEventsController);
+    _listenToBeaconEvents();
+
+    isSetup.value = true;
+    logger.d("BeaconManager setup complete.");
+  }
+
+  /// Starts scanning for beacons.
+  /// Throws an [Exception] if [init] has not been called before.
+  /// Throws a [TimeoutException] if the plugin setup takes longer than [setupTimeOut] (may be caused by missing permissions).
+  Future startScanning() async {
+    if(!isSetup.value) throw Exception("BeaconManager not setup.");
+
+    await BeaconsPlugin.startMonitoring().timeout(setupTimeOut);
+    isScanning.value = true;
+    logger.d("BeaconManager started scanning.");
+  }
+
+  /// Stops scanning for beacons.
+  Future stopScanning() async {
+    await BeaconsPlugin.stopMonitoring();
+    isScanning.value = false;
+    logger.d("BeaconManager stopped scanning.");
+  }
+
+  void _listenToBeaconEvents() async {
+    await for (final data in _beaconEventsController.stream) {
+      try {
+        if (data.isNotEmpty) {
+          _beaconInformationController
+              .add(BeaconInfo.fromJson(jsonDecode(data)));
+        }
+      } catch (e) {
+        isScanning.value = false;
+        _beaconInformationController.addError(e);
+        logger.d("Error occurred in beacon event stream: $e");
+      }
+    }
+  }
+
+  @override
+  FutureOr onDispose() {
+    _beaconInformationController.close();
+    _beaconEventsController.close();
+    logger.d("BeaconManager disposed.");
+  }
+}

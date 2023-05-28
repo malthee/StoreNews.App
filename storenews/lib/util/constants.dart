@@ -1,8 +1,20 @@
 import 'package:flutter/material.dart';
 
 const appName = "Store News";
+// -- News fetching -- //
+// When news for the same store is fetched again
 const beaconNewsFetchInterval = Duration(minutes: 30);
+const notificationCoolDown = Duration(minutes: 5);
 
+// -- Beacon Scanning -- //
+const enableBeaconPluginDebug = true;
+const beaconRegionName = "StoreNewsBeacons";
+const beaconRegionUUID = "acfd065e-c3c0-11e3-9bbe-1a514932ac01";
+
+// -- API Endpoints -- //
+const apiBaseUrl = "http://localhost:8080";
+
+// -- UI -- //
 class InsetSizes {
   static const small = 8.0;
   static const medium = 16.0;

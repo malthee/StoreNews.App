@@ -4,19 +4,6 @@ class BeaconInfo {
   final int major, minor;
   final double distanceMeter;
 
-  // Last time news for this beacon was fetched, TODO extract to logic
-  DateTime? _lastNewsFetch;
-
-
-  set lastNewsFetch(DateTime value) {
-    _lastNewsFetch = value;
-  }
-
-  bool isNewsFetchNeeded(DateTime currentTime) {
-    if (_lastNewsFetch == null) return true;
-    return currentTime.difference(_lastNewsFetch!) > beaconNewsFetchInterval;
-  }
-
   BeaconInfo({
     required this.major,
     required this.minor,
@@ -35,4 +22,16 @@ class BeaconInfo {
   String toString() {
     return 'BeaconInfo{major: $major, minor: $minor, distanceMeter: $distanceMeter}';
   }
+
+  // BeaconInfo is equal when major and minor are equal
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is BeaconInfo &&
+          runtimeType == other.runtimeType &&
+          major == other.major &&
+          minor == other.minor;
+
+  @override
+  int get hashCode => major.hashCode ^ minor.hashCode;
 }

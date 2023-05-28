@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 import 'package:storenews/domain/news_item.dart';
-import 'package:storenews/ui/widgets/bt_settings_button.dart';
+import 'package:storenews/ui/widgets/news_scan_settings_button.dart';
 import 'package:storenews/ui/widgets/news_item_list.dart';
+import 'package:storenews/ui/widgets/permissions_missing_dialog.dart';
 import 'package:storenews/util/constants.dart';
 import '../../i18n/news_overview.i18n.dart';
+import '../../manager/news_manager.dart';
 
-class NewsOverview extends StatelessWidget {
+class NewsOverview extends StatefulWidget {
   final Function(bool) onDarkModeToggle;
 
-  NewsOverview({super.key, required this.onDarkModeToggle});
+  const NewsOverview({super.key, required this.onDarkModeToggle});
 
+  @override
+  State<NewsOverview> createState() => _NewsOverviewState();
+}
+
+class _NewsOverviewState extends State<NewsOverview> {
   final newsItems = <NewsItem>[
     NewsItem(
         name: 'News Item 1',
@@ -67,6 +75,33 @@ class NewsOverview extends StatelessWidget {
         expires: DateTime.now().add(const Duration(days: 1)))
       ..scannedAt = DateTime.now().subtract(const Duration(days: 4)),
   ];
+  final newsManager = GetIt.I<NewsManager>();
+  bool _scanRunning = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Show dialog if setup failed
+    initPlatformState().then((value) => {
+          setState(() {
+            _scanRunning = value;
+          }),
+          if (!value)
+            showDialog(
+                context: context,
+                builder: (context) => const PermissionsMissingDialog())
+        });
+  }
+
+  Future<bool> initPlatformState() async {
+    // Try setup and start the news fetch
+    final initSuccess = await newsManager.init();
+    if (!initSuccess) {
+      return false;
+    }
+
+    return await newsManager.startNewsFetch();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,13 +117,13 @@ class NewsOverview extends StatelessWidget {
           // TODO scan toggle
           actions: [
             IconButton(
-                onPressed: () => onDarkModeToggle(!darkModeEnabled),
+                onPressed: () => widget.onDarkModeToggle(!darkModeEnabled),
                 icon: Visibility(
                   visible: darkModeEnabled,
                   replacement: const Icon(Icons.dark_mode),
                   child: const Icon(Icons.light_mode),
                 )),
-            BtSettingsButton(isScanning: true, onScanToggle: () {})
+            NewsScanSettingsButton(isScanning: true, onScanToggle: () {})
           ],
         ),
         body: Column(
