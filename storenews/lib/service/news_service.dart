@@ -17,8 +17,7 @@ class NewsService {
         "storeNumber": "$storeNumber"
       });
 
-  Uri newsDetailImageEndpoint(String id) =>
-      Uri.parse("$apiBaseUrl/newsItem/$id/detailImage");
+  // TODO by store endpoint
 
   NewsService({Client? httpClient})
       : httpClient = httpClient ?? GetIt.instance.get<Client>();

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:storenews/domain/news_item.dart';
 import 'package:storenews/ui/widgets/news_item_expires_icon.dart';
 import 'package:storenews/util/dynamic_datetime_format.dart';
 import 'package:storenews/util/navigation_helper.dart';
 
+import '../../service/image_service.dart';
 import '../../util/constants.dart';
 import '../widgets/store_icon_name.dart';
 import '../../i18n/news_detail.i18n.dart';
@@ -27,7 +29,11 @@ class NewsDetail extends StatelessWidget {
           children: [
             _ItemExpired(newsItem: newsItem),
             _DetailTitle(newsItem: newsItem),
-            _DetailImageView(),
+            Visibility(
+                visible: newsItem.detailImageId != null,
+                child: _DetailImageView(
+                    key: ValueKey("${newsItem.id}_detailImage"),
+                    imageId: newsItem.detailImageId!)),
             Center(
                 child: Text('last changed %s'
                     .i18n
@@ -41,19 +47,35 @@ class NewsDetail extends StatelessWidget {
 }
 
 class _DetailImageView extends StatelessWidget {
+  final String imageId;
+
   const _DetailImageView({
     super.key,
+    required this.imageId,
   });
 
   @override
   Widget build(BuildContext context) {
-    return PhotoView(
-      tightMode: true,
-      minScale: PhotoViewComputedScale.contained * 0.5,
-      maxScale: PhotoViewComputedScale.contained * 2,
-      // TODO load online
-      imageProvider: Image.network("https://i.imgur.com/p39jy0N.jpg").image,
-    );
+    final imageService = GetIt.I<ImageService>();
+
+    return FutureBuilder(
+        future: imageService.getImageById(imageId),
+        builder: (context, snapshot) {
+          if (snapshot.hasData && snapshot.data != null) {
+            final imageData = snapshot.data!;
+            return PhotoView(
+                tightMode: true,
+                minScale: PhotoViewComputedScale.contained * 0.5,
+                maxScale: PhotoViewComputedScale.contained * 2,
+                imageProvider: Image.memory(imageData.data,
+                        key: ValueKey("${imageId}_image"))
+                    .image);
+          } else if (!snapshot.hasError) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          return const SizedBox.shrink();
+          // Don't show anything on error or no image
+        });
   }
 }
 
