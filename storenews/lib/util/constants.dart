@@ -10,6 +10,7 @@ const notificationCoolDown = Duration(minutes: 5);
 const enableBeaconPluginDebug = true;
 const beaconRegionName = "StoreNewsBeacons";
 const beaconRegionUUID = "acfd065e-c3c0-11e3-9bbe-1a514932ac01";
+const beaconRecognitionDistance = 3.0; // in meters
 
 // -- API Endpoints -- //
 const apiBaseUrl = "http://localhost:8080";

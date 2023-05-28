@@ -72,8 +72,11 @@ class BeaconManager extends Disposable {
     await for (final data in _beaconEventsController.stream) {
       try {
         if (data.isNotEmpty) {
-          _beaconInformationController
-              .add(BeaconInfo.fromJson(jsonDecode(data)));
+          final decoded = jsonDecode(data);
+          // Only add beacons with the correct region.
+          if (decoded["name"] == beaconRegionName) {
+            _beaconInformationController.add(BeaconInfo.fromJson(decoded));
+          }
         }
       } catch (e) {
         isScanning.value = false;

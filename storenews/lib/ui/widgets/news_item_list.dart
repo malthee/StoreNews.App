@@ -159,28 +159,31 @@ class _NewsNotFound extends StatelessWidget {
 
     return Container(
       alignment: Alignment.center,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.article_outlined,
-            size: 80,
-            color: theme.disabledColor,
-          ),
-          const SizedBox(height: 16.0),
-          Text(
-            "No news items available".i18n,
-            style: theme.textTheme.headlineSmall,
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 8.0),
-          Text(
-            "Visit some locations and make sure scanning is enabled.".i18n,
-            style: theme.textTheme.bodyMedium!
-                .merge(TextStyle(color: theme.disabledColor)),
-            textAlign: TextAlign.center,
-          ),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(InsetSizes.medium),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.article_outlined,
+              size: 80,
+              color: theme.disabledColor,
+            ),
+            const SizedBox(height: 16.0),
+            Text(
+              "No news items available".i18n,
+              style: theme.textTheme.headlineSmall,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8.0),
+            Text(
+              "Visit some locations and make sure scanning is enabled.".i18n,
+              style: theme.textTheme.bodyMedium!
+                  .merge(TextStyle(color: theme.disabledColor)),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
       ),
     );
   }
