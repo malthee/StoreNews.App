@@ -67,7 +67,12 @@ class _StoreNewsAppState extends State<StoreNewsApp>
       theme: ThemeData.from(colorScheme: lightColorScheme, useMaterial3: true),
       darkTheme: ThemeData.dark(useMaterial3: true),
       themeMode: _darkModeEnabled ? ThemeMode.dark : ThemeMode.light,
-      home: NewsOverview(onDarkModeToggle: toggleDarkMode),
+      home: Builder(
+        builder: (context) {
+          registerNotificationPlugin(getIt, context);
+          return NewsOverview(onDarkModeToggle: toggleDarkMode);
+        }
+      ),
     );
   }
 }

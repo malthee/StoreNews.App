@@ -77,22 +77,29 @@ class NewsManager extends Disposable {
     return _beaconManager.beaconInformationStream.listen((beaconInfo) async {
       if (_shouldFetchNewsForBeacon(beaconInfo)) {
         logger.i("Fetching news for beacon $beaconInfo");
-        // TODO prevent spam fetching
-        _lastNewsFetch[beaconInfo] = DateTime.now();
-        final ni =
-            await _newsService.getLatestNews(beaconInfo.major, beaconInfo.minor)
-              ?..scannedAt = DateTime.now();
-
-        // When news was fetched more than once, we don't want to show it again.
-        if (ni != null && !_seenNews.contains(ni)) {
-          _fetchedNewsStreamController.add(ni);
-          _seenNews.add(ni);
-          logger.i("New news fetched for beacon $beaconInfo: $ni");
-        } else {
-          logger.d("No new news found for beacon $beaconInfo");
-        }
+        _fetchLatestNews(beaconInfo); // Async fetch, do not block stream
       }
     });
+  }
+
+  Future _fetchLatestNews(BeaconInfo beaconInfo) async {
+    // Prevent fetching news for this beacon again for a while.
+    _lastNewsFetch[beaconInfo] = DateTime.now();
+
+    final ni =
+        await _newsService.getLatestNews(beaconInfo.major, beaconInfo.minor)
+          ?..scannedAt = DateTime.now();
+
+    // When news was fetched more than once, we don't want to show it again.
+    if (ni != null) {
+      if (!_seenNews.contains(ni)) {
+        _fetchedNewsStreamController.add(ni);
+        _seenNews.add(ni);
+        logger.i("New news fetched for beacon $beaconInfo: $ni");
+      } else {
+        logger.d("Latest news has not changed for $beaconInfo");
+      }
+    }
   }
 
   @override

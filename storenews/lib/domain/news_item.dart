@@ -39,6 +39,19 @@ class NewsItem {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'markupContent': markupContent,
+      'storeNumber': storeNumber,
+      'companyNumber': companyNumber,
+      'lastChanged': lastChanged.toIso8601String(),
+      'expires': expires?.toIso8601String(),
+      'detailImageId': detailImageId,
+    };
+  }
+
   @override
   String toString() {
     return 'NewsItem{id: $id, storeNumber: $storeNumber, companyNumber: $companyNumber, name: $name, markupContent: $markupContent, lastChanged: $lastChanged, expires: $expires, detailImageId: $detailImageId, scannedAt: $scannedAt, read: $read}';
