@@ -18,7 +18,7 @@ class NewsManager extends Disposable {
 
   final StreamController<NewsItem> _fetchedNewsStreamController =
       StreamController.broadcast();
-  late final StreamSubscription<BeaconInfo> _beaconInformationSubscription;
+  StreamSubscription<BeaconInfo>? _beaconInformationSubscription;
 
   final isRunning = ValueNotifier(false);
 
@@ -31,15 +31,13 @@ class NewsManager extends Disposable {
       {BeaconManager? beaconManager,
       NewsService? newsService}) // Allow passing in a mock for testing.
       : _beaconManager = beaconManager ?? GetIt.I<BeaconManager>(),
-        _newsService = newsService ?? GetIt.I<NewsService>() {
-    _beaconInformationSubscription = _listenToBeaconInfo();
-  }
+        _newsService = newsService ?? GetIt.I<NewsService>();
 
   /// Starts the news fetching process. This will start the beacon manager and listen to beacon information.
   Future<bool> startNewsFetch() async {
     try {
+      _beaconInformationSubscription ??= _listenToBeaconInfo();
       await _beaconManager.startScanning();
-      _beaconInformationSubscription.resume();
       isRunning.value = true;
       logger.d("News fetch started.");
       return true;
@@ -52,7 +50,8 @@ class NewsManager extends Disposable {
   /// Stops the news fetching process. This will stop the beacon manager and stop listening to beacon information.
   Future<bool> stopNewsFetch() async {
     try {
-      _beaconInformationSubscription.pause();
+      _beaconInformationSubscription?.cancel();
+      _beaconInformationSubscription = null;
       await _beaconManager.stopScanning();
       isRunning.value = false;
       logger.d("News fetch stopped.");
@@ -104,7 +103,7 @@ class NewsManager extends Disposable {
 
   @override
   FutureOr onDispose() {
-    _beaconInformationSubscription.cancel();
+    _beaconInformationSubscription?.cancel();
     _fetchedNewsStreamController.close();
     logger.d("NewsManager disposed.");
   }

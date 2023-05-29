@@ -7,13 +7,12 @@ import 'package:storenews/ui/pages/news_overview.dart';
 import 'package:storenews/util/constants.dart';
 import 'package:storenews/util/service_setup.dart';
 
-
 final getIt = GetIt.instance;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  registerServices(getIt);
   runApp(const StoreNewsApp());
+  registerServices(getIt);
 }
 
 class StoreNewsApp extends StatefulWidget {
@@ -39,7 +38,7 @@ class _StoreNewsAppState extends State<StoreNewsApp>
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     super.didChangeAppLifecycleState(state);
     // Only show notifications if the app is in the background.
-    newsNotificationManager.appInForeground = state == AppLifecycleState.resumed;
+    newsNotificationManager.appInForeground = state != AppLifecycleState.paused;
   }
 
   @override

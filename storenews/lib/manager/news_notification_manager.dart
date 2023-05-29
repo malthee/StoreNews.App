@@ -14,23 +14,24 @@ class NewsNotificationManager extends Disposable {
   static final notificationPlugin = GetIt.I<FlutterLocalNotificationsPlugin>();
   final NewsManager _newsManager;
   final Set<NewsItem> _itemsSinceLastNotification = {};
-  late final StreamSubscription<NewsItem> _newsItemSubscription;
+  StreamSubscription<NewsItem>? _newsItemSubscription;
+  DateTime? _lastNotificationSent;
 
-  set appInForeground(bool value) {
+  set appInForeground(bool isForeground) {
     // Pause the news item subscription when the app is in the foreground.
-    if (value) {
-      _newsItemSubscription.pause();
-    } else {
-      _newsItemSubscription.resume();
+    if (isForeground && _newsItemSubscription != null) {
+      _newsItemSubscription!.cancel();
+      _newsItemSubscription = null;
+      logger.d("Stopped notification subscription.");
+    } else if (!isForeground && _newsItemSubscription == null) {
+      // Only init the subscription when it's not already running.
+      _newsItemSubscription = _listenToFetchedNews();
+      logger.d("Started notification subscription.");
     }
   }
 
-  DateTime? _lastNotificationSent;
-
   NewsNotificationManager({NewsManager? newsManager})
-      : _newsManager = newsManager ?? GetIt.I<NewsManager>() {
-    _newsItemSubscription = _listenToFetchedNews();
-  }
+      : _newsManager = newsManager ?? GetIt.I<NewsManager>();
 
   /// Aggregate and send out notifications
   StreamSubscription<NewsItem> _listenToFetchedNews() {
@@ -41,6 +42,7 @@ class NewsNotificationManager extends Disposable {
       if (_lastNotificationSent == null ||
           currentDate.difference(_lastNotificationSent!) >
               notificationCoolDown) {
+        logger.i("Sending notification.");
         _lastNotificationSent = currentDate;
         showNewsNotification(
             notificationPlugin, _itemsSinceLastNotification.toList());
@@ -51,6 +53,6 @@ class NewsNotificationManager extends Disposable {
 
   @override
   FutureOr onDispose() {
-    _newsItemSubscription.cancel();
+    _newsItemSubscription?.cancel();
   }
 }
