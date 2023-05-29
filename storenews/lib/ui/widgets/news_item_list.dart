@@ -83,6 +83,7 @@ class NewsItemList extends StatelessWidget {
       navigateToNewsDetail(context, newsItem);
   }
 
+  // TODO may refresh the list when the time ago changes
   String _scannedTimeAgoString(DateTime currentDateTime, DateTime? dateTime) {
     if (dateTime == null) return 'Unknown'.i18n;
     final difference = currentDateTime.difference(dateTime);
@@ -137,7 +138,7 @@ class _SeenExpiresInfo extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         if (newsItem.scannedAt != null)
-          Text('scanned %s'
+          Text('seen %s'
               .i18n
               .fill([formatDateTimeDynamically(newsItem.scannedAt!)]))
         else

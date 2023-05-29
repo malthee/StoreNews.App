@@ -7,7 +7,7 @@ extension Localization on String {
       {"en_us": "Hours ago"} +
       {"en_us": "A few minutes ago"} +
       {"en_us": "Just now"} +
-      {"en_us": "scanned %s"} +
+      {"en_us": "seen %s"} +
       {"en_us": "No news items available"} +
       {"en_us": "Visit some locations and make sure scanning is enabled."};
 
