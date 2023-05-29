@@ -1,0 +1,86 @@
+<mxfile host="Electron" modified="2023-05-29T15:23:40.526Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.2.1 Chrome/112.0.5615.87 Electron/24.1.2 Safari/537.36" etag="lEmHBaB5fSYMFU5IizKk" version="21.2.1" type="device">
+  <diagram name="Page-1" id="kCLAZcLhCDPOg8ZU-sD2">
+    <mxGraphModel dx="1434" dy="844" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="XnYi5FPic3lAnVm130AT-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="XnYi5FPic3lAnVm130AT-1" target="XnYi5FPic3lAnVm130AT-2">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="335" y="200" />
+              <mxPoint x="335" y="200" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XnYi5FPic3lAnVm130AT-21" value="Listen to Beacon Range Events" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="XnYi5FPic3lAnVm130AT-5">
+          <mxGeometry x="-0.2413" y="-2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XnYi5FPic3lAnVm130AT-1" value="Beacons Plugin" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=40;tabHeight=14;tabPosition=left;html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="260" y="90" width="150" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="XnYi5FPic3lAnVm130AT-2" value="BeaconManager" style="html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="275" y="230" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="XnYi5FPic3lAnVm130AT-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="XnYi5FPic3lAnVm130AT-3" target="XnYi5FPic3lAnVm130AT-7">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="170" y="390" />
+              <mxPoint x="170" y="390" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XnYi5FPic3lAnVm130AT-18" value="Fetch NewsItems for&lt;br&gt;BeaconInfo" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="XnYi5FPic3lAnVm130AT-17">
+          <mxGeometry x="0.1555" y="-2" relative="1" as="geometry">
+            <mxPoint x="13" y="-13" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XnYi5FPic3lAnVm130AT-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;startArrow=classic;startFill=1;endArrow=none;endFill=0;" edge="1" parent="1" source="XnYi5FPic3lAnVm130AT-3" target="XnYi5FPic3lAnVm130AT-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="XnYi5FPic3lAnVm130AT-20" value="Listen to BeaconInfo" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="XnYi5FPic3lAnVm130AT-19">
+          <mxGeometry x="0.1864" y="2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XnYi5FPic3lAnVm130AT-3" value="NewsManager" style="html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="275" y="360" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="XnYi5FPic3lAnVm130AT-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="XnYi5FPic3lAnVm130AT-4" target="XnYi5FPic3lAnVm130AT-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="XnYi5FPic3lAnVm130AT-23" value="Listen to NewsItems" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="XnYi5FPic3lAnVm130AT-22">
+          <mxGeometry x="-0.2381" relative="1" as="geometry">
+            <mxPoint x="-8" y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XnYi5FPic3lAnVm130AT-4" value="NotificationManager" style="html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="530" y="360" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="XnYi5FPic3lAnVm130AT-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;startArrow=block;startFill=1;" edge="1" parent="1" source="XnYi5FPic3lAnVm130AT-6" target="XnYi5FPic3lAnVm130AT-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="XnYi5FPic3lAnVm130AT-10" value="Enable when in Background&lt;br&gt;and receive Notifications" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="XnYi5FPic3lAnVm130AT-9">
+          <mxGeometry x="-0.354" y="-1" relative="1" as="geometry">
+            <mxPoint x="17" y="-26" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XnYi5FPic3lAnVm130AT-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;startArrow=classic;startFill=1;" edge="1" parent="1" source="XnYi5FPic3lAnVm130AT-6" target="XnYi5FPic3lAnVm130AT-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="XnYi5FPic3lAnVm130AT-14" value="Start/Stop Scanning&lt;br&gt;and receive NewsItems" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="XnYi5FPic3lAnVm130AT-13">
+          <mxGeometry x="0.2408" y="3" relative="1" as="geometry">
+            <mxPoint x="-57" y="12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XnYi5FPic3lAnVm130AT-6" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shadow=0;dashed=0;strokeWidth=1;shape=mxgraph.android.phone2;strokeColor=#c0c0c0;" vertex="1" parent="1">
+          <mxGeometry x="301.66999999999996" y="520" width="66.67" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="XnYi5FPic3lAnVm130AT-7" value="" style="image;points=[];aspect=fixed;html=1;align=center;shadow=0;dashed=0;image=img/lib/allied_telesis/computer_and_terminals/Server_Desktop.svg;" vertex="1" parent="1">
+          <mxGeometry x="50" y="350" width="71" height="90" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
