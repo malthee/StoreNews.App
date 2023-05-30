@@ -14,7 +14,7 @@ class NewsManager extends Disposable {
   final BeaconManager _beaconManager;
   final NewsService _newsService;
   final Map<BeaconInfo, DateTime> _lastNewsFetch = {};
-  final Set<NewsItem> _seenNews = {}; // TODO allow merge with store newsitems
+  final Set<NewsItem> _seenNews = {};
 
   final StreamController<NewsItem> _fetchedNewsStreamController =
       StreamController.broadcast();

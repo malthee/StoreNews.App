@@ -101,8 +101,6 @@ class _NewsOverviewState extends State<NewsOverview> with GetItStateMixin {
       setState(() {
         newsItems.insert(0, newsItem);
       });
-    }, onError: (e) {
-      // TODO handle errors
     });
   }
 

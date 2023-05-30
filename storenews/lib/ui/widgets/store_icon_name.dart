@@ -24,7 +24,7 @@ class StoreIconName extends StatefulWidget {
 class _StoreIconNameState extends State<StoreIconName> {
   final companyService = GetIt.I<CompanyService>();
   final storeService = GetIt.I<StoreService>();
-  late Future<List<dynamic>> storeCompanyFuture;
+  late final Future<List<dynamic>> storeCompanyFuture;
 
   @override
   void initState() {
@@ -41,7 +41,9 @@ class _StoreIconNameState extends State<StoreIconName> {
 
     return Row(
       children: [
-        CompanyLogo(key: ValueKey("${widget.companyNumber}_companyLogo"), companyNumber: widget.companyNumber),
+        CompanyLogo(
+            key: ValueKey("${widget.companyNumber}_companyLogo"),
+            companyNumber: widget.companyNumber),
         const SizedBox(width: 10),
         Expanded(
             child: FutureBuilder(

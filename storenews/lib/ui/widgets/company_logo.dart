@@ -20,7 +20,7 @@ class CompanyLogo extends StatefulWidget {
 class _CompanyLogoState extends State<CompanyLogo> {
   final imageService = GetIt.I<ImageService>();
   final companyService = GetIt.I<CompanyService>();
-  late Future<ImageData?> logoFuture;
+  late final Future<ImageData?> logoFuture;
 
   @override
   void initState() {

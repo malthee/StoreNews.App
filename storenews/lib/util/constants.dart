@@ -5,6 +5,7 @@ const appName = "Store News";
 // When news for the same store is fetched again
 const beaconNewsFetchInterval = Duration(minutes: 30);
 const notificationCoolDown = Duration(minutes: 5);
+const storeNewsCount = 10; // How many news items to fetch for a store
 
 // -- Beacon Scanning -- //
 const enableBeaconPluginDebug = false;
