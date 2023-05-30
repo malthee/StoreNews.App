@@ -20,11 +20,13 @@ class NewsManager extends Disposable {
       StreamController.broadcast();
   StreamSubscription<BeaconInfo>? _beaconInformationSubscription;
 
+  /// Whether the news fetching process is running, may be interrupted by errors or stop.
   final isRunning = ValueNotifier(false);
 
   /// Stream of news items that have been fetched because the user was in the beacon range.
   Stream<NewsItem> get fetchedNewsStream => _fetchedNewsStreamController.stream;
 
+  /// Set of news items that have been seen by the user.
   Set<NewsItem> get seenNews => _seenNews;
 
   NewsManager(

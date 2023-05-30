@@ -22,62 +22,6 @@ class NewsOverview extends StatefulWidget with GetItStatefulWidgetMixin {
 }
 
 class _NewsOverviewState extends State<NewsOverview> with GetItStateMixin {
-  // final newsItems = <NewsItem>[
-  //   NewsItem(
-  //       name: 'News Item 1',
-  //       markdownContent: 'News Item 1 Description #HELLO and so on',
-  //       lastChanged: DateTime.now(),
-  //       companyNumber: 1,
-  //       storeNumber: 1,
-  //       id: '1')
-  //     ..scannedAt = DateTime.now(),
-  //   NewsItem(
-  //       name: 'News Item 2aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-  //       markdownContent:
-  //           'News Item 2 Description #HELLO and so onaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa and more more more',
-  //       lastChanged: DateTime.now(),
-  //       companyNumber: 1,
-  //       storeNumber: 1,
-  //       id: '2',
-  //       expires: DateTime.now().subtract(const Duration(days: 1)))
-  //     ..scannedAt = DateTime.now().subtract(const Duration(minutes: 2)),
-  //   NewsItem(
-  //       name: 'News Item 3',
-  //       markdownContent: 'News Item 3 Description #HELLO and so on',
-  //       lastChanged: DateTime.now(),
-  //       companyNumber: 1,
-  //       storeNumber: 1,
-  //       id: '3',
-  //       expires: DateTime.now().add(const Duration(days: 1)))
-  //     ..scannedAt = DateTime.now().subtract(const Duration(minutes: 20)),
-  //   NewsItem(
-  //       name: 'News Item 4',
-  //       markdownContent: 'News Item 4 Description #HELLO and so on',
-  //       lastChanged: DateTime.now(),
-  //       companyNumber: 1,
-  //       storeNumber: 1,
-  //       id: '4',
-  //       expires: DateTime.now().add(const Duration(days: 1)))
-  //     ..scannedAt = DateTime.now().subtract(const Duration(hours: 4)),
-  //   NewsItem(
-  //       name: 'News Item 5',
-  //       markdownContent: 'News Item 5 Description #HELLO and so on',
-  //       lastChanged: DateTime.now(),
-  //       companyNumber: 1,
-  //       storeNumber: 1,
-  //       id: '5',
-  //       expires: DateTime.now().add(const Duration(days: 1)))
-  //     ..scannedAt = DateTime.now().subtract(const Duration(hours: 6)),
-  //   NewsItem(
-  //       name: 'News Item 6',
-  //       markdownContent: 'News Item 6 Description #HELLO and so on',
-  //       lastChanged: DateTime.now(),
-  //       companyNumber: 1,
-  //       storeNumber: 1,
-  //       id: '6',
-  //       expires: DateTime.now().add(const Duration(days: 1)))
-  //     ..scannedAt = DateTime.now().subtract(const Duration(days: 4)),
-  // ];
   final newsManager = GetIt.I<NewsManager>();
   final newsItems = <NewsItem>[];
   late final StreamSubscription<NewsItem> _newsItemSubscription;

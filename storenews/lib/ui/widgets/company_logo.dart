@@ -37,7 +37,7 @@ class _CompanyLogoState extends State<CompanyLogo> {
     return FutureBuilder(
         future: logoFuture,
         builder: (context, snapshot) {
-          if (snapshot.hasData && snapshot.data != null) {
+          if (snapshot.hasData) {
             final imageData = snapshot.data!;
             return Padding(
               padding: const EdgeInsets.all(InsetSizes.small),
