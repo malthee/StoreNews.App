@@ -122,7 +122,8 @@ The backend is a REST API that provides the data for the app. It is written in J
 - [ ] Load more news when scrolling down in the store view
 - [ ] Secure (HTTPS) communication with backend
 
-
+## Disclaimers
+* This is just a technical demonstration not a REAL PRODUCT. All images used belong to their respective copyright holders. If you are the owner if one of the used images and you do not agree with the usage please contact me.
 
 
 
