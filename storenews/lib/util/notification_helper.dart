@@ -13,19 +13,7 @@ void showNewsNotification(FlutterLocalNotificationsPlugin notificationsPlugin,
     List<NewsItem> newsItems) async {
   if (newsItems.isEmpty) return;
 
-  var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-    "newsItemChannel",
-    "News Item Channel",
-    "Where new News Items detected by StoreNews are shown",
-    importance: Importance.high,
-    priority: Priority.high,
-    vibrationPattern:
-        Int64List.fromList([100, 10, 100, 10, 100]), // Funny feature
-  );
-  var iOSPlatformChannelSpecifics = const IOSNotificationDetails();
-  var platformChannelSpecifics = NotificationDetails(
-      android: androidPlatformChannelSpecifics,
-      iOS: iOSPlatformChannelSpecifics);
+  NotificationDetails platformChannelSpecifics = _newsNotificationDetails();
 
   if (newsItems.length == 1) {
     final item = newsItems.first;
@@ -47,4 +35,21 @@ void handleNotificationClick(String? payload, BuildContext context) {
       navigateToNewsDetail(context, newsItem);
     } catch (_) {} // If navigation does not work, do nothing
   }
+}
+
+NotificationDetails _newsNotificationDetails() {
+  var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+    "newsItemChannel",
+    "News Item Channel",
+    "Where new News Items detected by StoreNews are shown",
+    importance: Importance.high,
+    priority: Priority.high,
+    vibrationPattern:
+        Int64List.fromList([100, 10, 100, 10, 100]), // Funny feature
+  );
+  var iOSPlatformChannelSpecifics = const IOSNotificationDetails();
+  var platformChannelSpecifics = NotificationDetails(
+      android: androidPlatformChannelSpecifics,
+      iOS: iOSPlatformChannelSpecifics);
+  return platformChannelSpecifics;
 }

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get_it/get_it.dart';
@@ -12,10 +10,8 @@ import 'package:storenews/service/authorized_client.dart';
 import 'package:storenews/service/company_service.dart';
 import 'package:storenews/service/image_service.dart';
 import 'package:storenews/service/news_service.dart';
-import 'package:storenews/util/navigation_helper.dart';
+import 'package:storenews/service/store_service.dart';
 import 'package:storenews/util/notification_helper.dart';
-
-import '../domain/news_item.dart';
 
 void registerServices(GetIt getIt) {
   // -- Tooling -- //
@@ -32,6 +28,7 @@ void registerServices(GetIt getIt) {
   getIt.registerLazySingleton<NewsService>(() => NewsService());
   getIt.registerLazySingleton<ImageService>(() => ImageService());
   getIt.registerLazySingleton<CompanyService>(() => CompanyService());
+  getIt.registerLazySingleton<StoreService>(() => StoreService());
 }
 
 // Notifications Plugin needs context to navigate.
@@ -43,9 +40,10 @@ void registerNotificationPlugin(GetIt getIt, BuildContext context) {
   const initSettings = InitializationSettings(
       android: AndroidInitializationSettings('@mipmap/ic_launcher'),
       iOS: IOSInitializationSettings());
-  getIt.registerLazySingleton<FlutterLocalNotificationsPlugin>(() =>
-      FlutterLocalNotificationsPlugin()
-        ..initialize(initSettings,
-            onSelectNotification: (payload) =>
-                Future(() => handleNotificationClick(payload, context))));
+  getIt.registerLazySingleton<
+      FlutterLocalNotificationsPlugin>(() => FlutterLocalNotificationsPlugin()
+    ..initialize(initSettings,
+        // This is where we handle on click of Notifs -> navigate to details
+        onSelectNotification: (payload) =>
+            Future(() => handleNotificationClick(payload, context))));
 }

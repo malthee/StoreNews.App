@@ -51,6 +51,14 @@ class NewsItem {
   }
 
   @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is NewsItem && runtimeType == other.runtimeType && id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
+
+  @override
   String toString() {
     return 'NewsItem{id: $id, storeNumber: $storeNumber, companyNumber: $companyNumber, name: $name, markupContent: $markupContent, lastChanged: $lastChanged, expires: $expires, detailImageId: $detailImageId, scannedAt: $scannedAt, read: $read}';
   }

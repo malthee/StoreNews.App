@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:beacons_plugin/beacons_plugin.dart';
-import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -9,16 +8,17 @@ import 'package:storenews/domain/beacon_info.dart';
 import 'package:storenews/i18n/beacon_manager.i18n.dart';
 import 'package:storenews/util/constants.dart';
 
+const setupTimeOut = Duration(
+    seconds: 10); // Otherwise BeaconPlugin methods may block forever.
+
 class BeaconManager extends Disposable {
-  static const setupTimeOut = Duration(
-      seconds: 10); // Otherwise BeaconPlugin methods may block forever.
 
   static final logger = GetIt.I<Logger>();
 
   final StreamController<BeaconInfo> _beaconInformationController =
-      StreamController<BeaconInfo>.broadcast();
+  StreamController<BeaconInfo>.broadcast();
   final StreamController<String> _beaconEventsController =
-      StreamController<String>.broadcast();
+  StreamController<String>.broadcast();
   StreamSubscription<String>? _beaconEventsSubscription;
 
   /// Stream of [BeaconInfo]s that have been detected.
@@ -48,7 +48,9 @@ class BeaconManager extends Disposable {
     if (enableBeaconPluginDebug) BeaconsPlugin.setDebugLevel(2);
 
     await Permission.location.request();
-    if (!await Permission.locationAlways.request().isGranted) {
+    if (!await Permission.locationAlways
+        .request()
+        .isGranted) {
       throw Exception("Location permission not granted");
     }
 
@@ -75,7 +77,6 @@ class BeaconManager extends Disposable {
       try {
         if (data.isNotEmpty) {
           final decoded = jsonDecode(data);
-          logger.d("Beacon event: $decoded");
           // Only add beacons with the correct region.
           if (decoded["name"] == beaconRegionName) {
             _beaconInformationController

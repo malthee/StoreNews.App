@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:storenews/domain/image_data.dart';
 import 'package:storenews/domain/news_item.dart';
 import 'package:storenews/ui/widgets/news_item_expires_icon.dart';
 import 'package:storenews/util/dynamic_datetime_format.dart';
@@ -29,11 +30,10 @@ class NewsDetail extends StatelessWidget {
           children: [
             _ItemExpired(newsItem: newsItem),
             _DetailTitle(newsItem: newsItem),
-            Visibility(
-                visible: newsItem.detailImageId != null,
-                child: _DetailImageView(
-                    key: ValueKey("${newsItem.id}_detailImage"),
-                    imageId: newsItem.detailImageId!)),
+            if (newsItem.detailImageId != null)
+              _DetailImageView(
+                  key: ValueKey("${newsItem.id}_detailImage"),
+                  imageId: newsItem.detailImageId!),
             Center(
                 child: Text('last changed %s'
                     .i18n
@@ -46,7 +46,7 @@ class NewsDetail extends StatelessWidget {
   }
 }
 
-class _DetailImageView extends StatelessWidget {
+class _DetailImageView extends StatefulWidget {
   final String imageId;
 
   const _DetailImageView({
@@ -55,11 +55,23 @@ class _DetailImageView extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    final imageService = GetIt.I<ImageService>();
+  State<_DetailImageView> createState() => _DetailImageViewState();
+}
 
+class _DetailImageViewState extends State<_DetailImageView> {
+  final imageService = GetIt.I<ImageService>();
+  late final Future<ImageData?> imageFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    imageFuture = imageService.getImageById(widget.imageId);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return FutureBuilder(
-        future: imageService.getImageById(imageId),
+        future: imageFuture,
         builder: (context, snapshot) {
           if (snapshot.hasData && snapshot.data != null) {
             final imageData = snapshot.data!;
@@ -68,7 +80,7 @@ class _DetailImageView extends StatelessWidget {
                 minScale: PhotoViewComputedScale.contained * 0.5,
                 maxScale: PhotoViewComputedScale.contained * 2,
                 imageProvider: Image.memory(imageData.data,
-                        key: ValueKey("${imageId}_image"))
+                        key: ValueKey("${widget.imageId}_image"))
                     .image);
           } else if (!snapshot.hasError) {
             return const Center(child: CircularProgressIndicator());

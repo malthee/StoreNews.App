@@ -22,3 +22,23 @@ class Store {
     );
   }
 }
+
+class StoreKey {
+  final int companyNumber, storeNumber;
+
+  const StoreKey({
+    required this.companyNumber,
+    required this.storeNumber,
+  });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is StoreKey &&
+          runtimeType == other.runtimeType &&
+          companyNumber == other.companyNumber &&
+          storeNumber == other.storeNumber;
+
+  @override
+  int get hashCode => companyNumber.hashCode ^ storeNumber.hashCode;
+}
