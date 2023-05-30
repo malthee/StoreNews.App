@@ -19,8 +19,7 @@ class BeaconManager extends Disposable {
       StreamController<BeaconInfo>.broadcast();
   final StreamController<String> _beaconEventsController =
       StreamController<String>.broadcast();
-
-  final ValueNotifier<bool> isScanning = ValueNotifier(false);
+  StreamSubscription<String>? _beaconEventsSubscription;
 
   /// Stream of [BeaconInfo]s that have been detected.
   Stream<BeaconInfo> get beaconInformationStream =>
@@ -30,15 +29,16 @@ class BeaconManager extends Disposable {
   /// Throws a [TimeoutException] if the plugin setup takes longer than [setupTimeOut] (may be caused by missing permissions).
   Future startScanning() async {
     await _init();
+    _beaconEventsSubscription ??= _listenToBeaconEvents();
     await BeaconsPlugin.startMonitoring().timeout(setupTimeOut);
-    isScanning.value = true;
     logger.d("BeaconManager started scanning.");
   }
 
   /// Stops scanning for beacons.
   Future stopScanning() async {
+    _beaconEventsSubscription?.cancel();
+    _beaconEventsSubscription = null;
     await BeaconsPlugin.stopMonitoring();
-    isScanning.value = false;
     logger.d("BeaconManager stopped scanning.");
   }
 
@@ -58,32 +58,37 @@ class BeaconManager extends Disposable {
     await BeaconsPlugin.addRegion(beaconRegionName, beaconRegionUUID)
         .timeout(setupTimeOut);
 
-    // TODO values from config
-    //BeaconsPlugin.setForegroundScanPeriodForAndroid(foregroundScanPeriod: 2200, foregroundBetweenScanPeriod: 10);
-    //BeaconsPlugin.setBackgroundScanPeriodForAndroid(backgroundScanPeriod: 2200, backgroundBetweenScanPeriod: 10);
+    BeaconsPlugin.setForegroundScanPeriodForAndroid(
+        foregroundScanPeriod: beaconScanDuration.inMilliseconds,
+        foregroundBetweenScanPeriod: beaconForegroundScanPause.inMilliseconds);
+    BeaconsPlugin.setBackgroundScanPeriodForAndroid(
+        backgroundScanPeriod: beaconScanDuration.inMilliseconds,
+        backgroundBetweenScanPeriod: beaconBackgroundScanPause.inMilliseconds);
 
     await BeaconsPlugin.runInBackground(true).timeout(setupTimeOut);
     BeaconsPlugin.listenToBeacons(_beaconEventsController);
-    _listenToBeaconEvents();
     logger.d("BeaconManager setup complete.");
   }
 
-  void _listenToBeaconEvents() async {
-    await for (final data in _beaconEventsController.stream) {
+  StreamSubscription<String> _listenToBeaconEvents() {
+    return _beaconEventsController.stream.listen((data) {
       try {
         if (data.isNotEmpty) {
           final decoded = jsonDecode(data);
+          logger.d("Beacon event: $decoded");
           // Only add beacons with the correct region.
           if (decoded["name"] == beaconRegionName) {
-            _beaconInformationController.add(BeaconInfo.fromBeaconEvent(decoded));
+            _beaconInformationController
+                .add(BeaconInfo.fromBeaconEvent(decoded));
           }
         }
       } catch (e) {
-        isScanning.value = false;
-        _beaconInformationController.addError(e);
-        logger.d("Error occurred in beacon event stream: $e");
+        logger.e("Error occurred in handling beacon data: $e");
       }
-    }
+    }, onError: (error) {
+      _beaconInformationController.addError(error);
+      logger.e("Error occurred in beacon event stream: $error");
+    });
   }
 
   @override

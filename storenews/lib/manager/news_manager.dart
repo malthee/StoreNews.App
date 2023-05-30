@@ -78,6 +78,10 @@ class NewsManager extends Disposable {
         logger.i("Fetching news for beacon $beaconInfo");
         _fetchLatestNews(beaconInfo); // Async fetch, do not block stream
       }
+    }, onError: (e) async {
+      logger.e(
+          "Error while listening to beacon information, scanning stopped: $e");
+      await stopNewsFetch(); // Cleanup, isRunning false
     });
   }
 

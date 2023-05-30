@@ -17,7 +17,8 @@ void showNewsNotification(FlutterLocalNotificationsPlugin notificationsPlugin,
     "newsItemChannel",
     "News Item Channel",
     "Where new News Items detected by StoreNews are shown",
-    playSound: false,
+    importance: Importance.high,
+    priority: Priority.high,
     vibrationPattern:
         Int64List.fromList([100, 10, 100, 10, 100]), // Funny feature
   );

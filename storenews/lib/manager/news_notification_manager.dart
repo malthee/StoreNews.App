@@ -54,5 +54,6 @@ class NewsNotificationManager extends Disposable {
   @override
   FutureOr onDispose() {
     _newsItemSubscription?.cancel();
+    logger.d("NewsNotificationManager disposed.");
   }
 }
