@@ -50,11 +50,54 @@ As a user, I want to be able to:
 * Quarkus (Java)
 * MongoDB
 
-### Architecture
+## Architecture
+### Data flow inside the Flutter app:
 
+![Data Flow](doc/dataflow-architecture.svg)
 
-### Implementation details
+For beacon scanning the `beacon_plugin` is being used. Because it didn't fit the requirements of the project, it was extended on a repository fork. As the app needs to work in the background the plugin uses an android foreground service. This is why a sticky notification is being displayed when the app is in background. The scanning is started and stopped by the `BeaconManager` and is configured in the `util/constants.dart` file.
 
+Inside of the app the flow is handled by `Streams` and `StreamSubscriptions`. Starting with the Beacons Plugin, a subscription to the beacon range events is added. These values are then parsed in the `BeaconManager`. The result is extracted with the relevant data:
+```json
+BeaconInfo
+{
+  "major": "int",
+  "minor": "int",
+  "distanceMeter": "double"
+}
+```
+The `NewsManager` then uses the `major and minor` to identify the company and store and fetch the latest news accordingly. This process is also checks if news for the store should be checked -> enough time has passed and the user is close to the beacon. The `NewsManager` then provides a `NewsItem` object:
+```json
+NewsItem
+{
+    "id": "string",
+    "storeNumber": "int",
+    "companyNumber": "int",
+    "name": "string",
+    "markupContent": "string",
+    "lastChanged": "DateTime",
+    "expires": "DateTime",
+    "detailImageId": "string",
+    "scannedAt": "DateTime"
+}
+```
+This `NewsItem` is then shown in the main overview of the app. If the app is in background, a notification will be shown by the `NotificationManager`. If the user clicks on the notification, the app will be opened and the `NewsItem` will be shown in the detail view.
+
+### Frontend architecture:
+![Frontend Architecture](doc/frontend-architecture.svg)
+
+* UI is separated into `pages` and `widgets` that define the display logic
+* `services` provide the data from the REST backend, also do the authorization workflow
+* `managers` handle the data flow inside the app using streams and listeners
+* `domain` is used across the application, defines the data models
+* `util` as well contains helper classes and functions
+* `i18n` contains the internationalization files
+
+## Backend architecture:
+
+![Backend Architecture](doc/backend-architecture.svg)
+
+The backend is a REST API that provides the data for the app. It is written in Java with Quarkus and uses MongoDB as a database. It has an authentication system, where JWT requests are required to access the resources. Customers get a token with limited access, but they don't need to login. Company representatives can login and edit their data, publish new NewsItems. 
 
 ## Future TODOs
 - [ ] Add more languages
