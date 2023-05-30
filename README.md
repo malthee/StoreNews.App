@@ -18,6 +18,17 @@
 
 The mix between english and german is intended, as the app does support internationalization, but the data is defined in the language of the store (in this case german).
 
+## Installation & Usage
+To install the example application perform the following steps:
+
+* Prerequisites: Flutter SDK & supported IDE, Java JDK 17+, one or more iBeacons
+* Download the latest release from https://github.com/malthee/StoreNews.App/releases/
+* Navigate to `/backend/StoreNews` and either run it with maven or perform `quarkus dev` to start
+* Navigate to `/app/StoreNews`
+  * Run `flutter pub get` to install the dependencies
+  * Run `flutter run` to start the app (should be run on a real device to find beacons)
+* Be in possesion of iBeacons and configure their UUID to the value defined in `util/constants.dart`. Also configure the major and minor values to the store and company number, which are either returned by the service when a new resource is created, or can be on of the example data company/store combinations: ((1,1),(1,2),(2,1)).
+  * To configure beacons there are many apps available. For Android there is the `BlueBeaconManager`.
 ## Problem Statement
 Store promotions or offers are often overlooked, even though they may be of interest to people passing by. With the help of cleverly placed Bluetooth beacons (as part of Smart City) and a smartphone app, users can receive relevant information in real time. This not only improves the shopping experience, but also enables stores to optimize their marketing strategies and attract potential customers in new ways. 
 
@@ -106,6 +117,7 @@ The backend is a REST API that provides the data for the app. It is written in J
 - [ ] Rich Text support in news, clickable links (with security)
 - [ ] Design improvements: better list design, fancier UI elements
 - [ ] Load more news when scrolling down in the store view
+- [ ] Secure (HTTPS) communication with backend
 
 
 
