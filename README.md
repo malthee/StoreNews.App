@@ -1,21 +1,22 @@
 # StoreNews.App (Flutter App &amp; MUS2UE Project)
 *Stay informed on the go with StoreNews.*
 
+
 ## Showcase
-### Details
+|  Details |   |
+|---|---|
+| <img src="./doc/img/detail.jpg" width="300" />  |  <img src="./doc/img/detailexp.jpg" width="300" />  |
 
-<img src="./doc/img/detail.jpg" width="300" />
-<img src="./doc/img/detailexp.jpg" width="300" />
+| Overview | Store |
+|---|---|
+| <img src="./doc/img/overview.jpg" width="300" />  |  <img src="./doc/img/store.jpg" width="300" />  |
 
-### Overview and Store
 
-<img src="./doc/img/overview.jpg" width="300" />
-<img src="./doc/img/store.jpg" width="300" />
+| Permissions | Notifications |
+|---|---|
+| <img src="./doc/img/permission.jpg" width="300" />  |  <img src="./doc/img/notification.jpg" width="300" />  |
 
-### Permissions and Notifications
-
-<img src="./doc/img/permission.jpg" width="300" />
-<img src="./doc/img/notification.jpg" width="300" />
+The mix between english and german is intended, as the app does support internationalization, but the data is defined in the language of the store (in this case german).
 
 ## Problem Statement
 Store promotions or offers are often overlooked, even though they may be of interest to people passing by. With the help of cleverly placed Bluetooth beacons (as part of Smart City) and a smartphone app, users can receive relevant information in real time. This not only improves the shopping experience, but also enables stores to optimize their marketing strategies and attract potential customers in new ways. 
