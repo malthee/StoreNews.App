@@ -2,7 +2,7 @@
 *Stay informed on the go with StoreNews.*
 
 ## Showcase
-https://github.com/malthee/StoreNews.App/assets/18032233/7c07a171-4311-4a33-9409-ca33b56e2b66
+https://github.com/malthee/StoreNews.App/assets/18032233/2d2dd80e-052d-46b8-a04e-e684b71a5492
 
 |  Details |   |
 |---|---|
