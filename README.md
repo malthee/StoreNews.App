@@ -1,8 +1,9 @@
 # StoreNews.App (Flutter App &amp; MUS2UE Project)
 *Stay informed on the go with StoreNews.*
 
-
 ## Showcase
+https://github.com/malthee/StoreNews.App/assets/18032233/7c07a171-4311-4a33-9409-ca33b56e2b66
+
 |  Details |   |
 |---|---|
 | <img src="./doc/img/detail.jpg" width="300" />  |  <img src="./doc/img/detailexp.jpg" width="300" />  |
@@ -23,7 +24,7 @@ The mix between english and german is intended, as the app does support internat
 ## Installation & Usage
 To install the example application perform the following steps:
 
-* Prerequisites: Flutter SDK & supported IDE, Java JDK 17+, one or more iBeacons
+* Prerequisites: Flutter SDK & supported IDE, Java JDK 17+, one or more iBeacons and a running Docker instance (for the backend)
 * Download the latest release from https://github.com/malthee/StoreNews.App/releases/
 * Navigate to `/backend/StoreNews` and either run it with maven or perform `quarkus dev` to start
 * Navigate to `/app/StoreNews`
