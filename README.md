@@ -16,7 +16,9 @@
 |---|---|
 | <img src="./doc/img/permission.jpg" width="300" />  |  <img src="./doc/img/notification.jpg" width="300" />  |
 
-The mix between english and german is intended, as the app does support internationalization, but the data is defined in the language of the store (in this case german).
+Also see the rough sketches in the [doc folder](./doc/sketches.md).
+
+The mix between english and german is intended, as the app does support internationalization, but the data is defined in the language of the store (in this case german). 
 
 ## Installation & Usage
 To install the example application perform the following steps:
