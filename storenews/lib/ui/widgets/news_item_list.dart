@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:storenews/domain/news_item.dart';
 import 'package:storenews/ui/widgets/company_logo.dart';
@@ -8,8 +10,10 @@ import 'package:storenews/util/navigation_helper.dart';
 import '../../util/constants.dart';
 import '../../i18n/news_item_list.i18n.dart';
 
+const listRefreshTime = Duration(minutes: 1);
+
 /// Shows either a list of [NewsItem]s or a message that there are none
-class NewsItemList extends StatelessWidget {
+class NewsItemList extends StatefulWidget {
   final List<NewsItem> newsItems;
   final ScrollPhysics? scrollPhysics;
   final bool showTimeAgo;
@@ -21,25 +25,48 @@ class NewsItemList extends StatelessWidget {
       this.showTimeAgo = false});
 
   @override
+  State<NewsItemList> createState() => _NewsItemListState();
+}
+
+class _NewsItemListState extends State<NewsItemList> {
+  // Refresh the list every minute to keep the time ago and expires up to date
+  late final Timer timer;
+  var _currentDateTime = DateTime.now();
+
+  @override
+  void initState() {
+    super.initState();
+    timer = Timer.periodic(listRefreshTime, (timer) {
+      setState(() => _currentDateTime = DateTime.now());
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    timer.cancel();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final currentDateTime = DateTime.now();
     String? lastScannedAgoString; // Used for showing .. time ago
 
     return Visibility(
-      visible: newsItems.isNotEmpty,
+      visible: widget.newsItems.isNotEmpty,
       replacement: const _NewsNotFound(),
       child: ListView.builder(
         padding: const EdgeInsets.symmetric(horizontal: InsetSizes.small),
         shrinkWrap: true,
-        physics: scrollPhysics,
-        itemCount: newsItems.length,
+        physics: widget.scrollPhysics,
+        itemCount: widget.newsItems.length,
         itemBuilder: (context, index) {
-          final newsItem = newsItems[index];
+          final newsItem = widget.newsItems[index];
           // Create a string to group the news items by time ago
           final agoString =
-              _scannedTimeAgoString(currentDateTime, newsItem.scannedAt);
-          final showAgoTitle = showTimeAgo && lastScannedAgoString != agoString;
+              _scannedTimeAgoString(_currentDateTime, newsItem.scannedAt);
+          final showAgoTitle =
+              widget.showTimeAgo && lastScannedAgoString != agoString;
           lastScannedAgoString = agoString;
 
           return Column(
@@ -80,10 +107,9 @@ class NewsItemList extends StatelessWidget {
   }
 
   void _newsItemTapped(BuildContext context, NewsItem newsItem) {
-      navigateToNewsDetail(context, newsItem);
+    navigateToNewsDetail(context, newsItem);
   }
 
-  // TODO may refresh the list when the time ago changes
   String _scannedTimeAgoString(DateTime currentDateTime, DateTime? dateTime) {
     if (dateTime == null) return 'Unknown'.i18n;
     final difference = currentDateTime.difference(dateTime);
@@ -114,7 +140,9 @@ class _StoreIconNavigator extends StatelessWidget {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(BorderSizes.circularRadius),
               color: Theme.of(context).colorScheme.surface),
-          child: CompanyLogo(companyNumber: newsItem.companyNumber)),
+          child: CompanyLogo(
+              key: ValueKey("${newsItem.companyNumber}_companyLogo"),
+              companyNumber: newsItem.companyNumber)),
     );
   }
 

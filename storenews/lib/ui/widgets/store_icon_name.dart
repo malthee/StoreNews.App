@@ -41,7 +41,7 @@ class _StoreIconNameState extends State<StoreIconName> {
 
     return Row(
       children: [
-        CompanyLogo(companyNumber: widget.companyNumber),
+        CompanyLogo(key: ValueKey("${widget.companyNumber}_companyLogo"), companyNumber: widget.companyNumber),
         const SizedBox(width: 10),
         Expanded(
             child: FutureBuilder(
